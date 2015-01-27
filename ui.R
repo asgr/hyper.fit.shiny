@@ -1,5 +1,6 @@
 shinyUI(fluidPage(
-    
+    tags$head(tags$script(src="jquery-1.11.2.min.js")),
+    tags$head(tags$script(src="script.js")),
     titlePanel(title="hyper.fit"),
     tabsetPanel(
         tabPanel("Plot",
@@ -15,18 +16,23 @@ shinyUI(fluidPage(
                                        '.csv',
                                        '.tsv'
                                    )
-                         )
-                         #actionButton(inputId="test_button", label=span("test"), icon("random"))
+                         ),
+                         tags$hr(),
+                         h4("Examples"),
+                         actionButton(inputId="example_plot_FP6dFGS", label=span("FP6dFGS"), icon("bar-chart-o"))
                          ),
                      mainPanel(
-                         plotOutput("test_plot2d"),
-                         webGLOutput("test_plot3d", width="100%")
+                         plotOutput("hyper_fit_plot2d"),
+                         webGLOutput("hyper_fit_plot3d", width="100%")
                          )
                  ),
                  br()
         ),
         tabPanel("Info",
-                 p("info contents")
+                 h3("About"),
+                 p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c"),
+                   "This website is written in the programming language", strong("R"), "and uses the library", strong("Shiny"), "to provide
+                   the interface.")
         )
     )
 ))

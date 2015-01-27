@@ -1,9 +1,6 @@
 require("hyper.fit")
 
-# By default, the upload limit is 5MB. It can be with this:
-# options(shiny.maxRequestSize = 9*1024^2)
-
-shinyServer(function(input, output, clientData, session) {
+shinyServer(function(input, output, session) {
     
     getData <- reactive({
         
@@ -42,29 +39,27 @@ shinyServer(function(input, output, clientData, session) {
         return (out)
     })
     
-    #output$dynamic_plots <- renderPlot({
-        #layout(matrix(c(1,2,3,4),2,2))
-        #plot(1:10,1:10)
-        #plot(1:20,1:20)
-        #plot(1:30,1:30)
-        #plot(1:40,1:40)
-    #})
-    
-    output$test_plot2d <- renderPlot({
+    output$hyper_fit_plot2d <- renderPlot({
         out <- getData()
         if(!is.null(out) && out$ndims == 2) {
             fit <- hyper.fit(X=out$X, covarray=out$covarray)
             plot(fit)
+            session$sendCustomMessage(type = "showPlot", message = "hyper_fit_plot2d")
+        }
+        else {
+            session$sendCustomMessage(type = "hidePlot", message ="hyper_fit_plot2d")
         }
     })
     
-    output$test_plot3d <- renderWebGL({
+    output$hyper_fit_plot3d <- renderWebGL({
         out <- getData()
         if(!is.null(out) && out$ndims == 3) {
             fit <- hyper.fit(X=out$X, covarray=out$covarray)
             plot(fit)
+            session$sendCustomMessage(type = "showPlot", message = "hyper_fit_plot3d")
         }
         else {
+            session$sendCustomMessage(type = "hidePlot", message = "hyper_fit_plot3d")
             points3d(1,1,1)
             axes3d()
         }
