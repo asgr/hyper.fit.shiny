@@ -1,1 +1,1 @@
-library("shinyRGL")
+require("shinyRGL")

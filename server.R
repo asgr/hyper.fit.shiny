@@ -1,5 +1,4 @@
-library("hyper.fit")
-data(MJB)
+require("hyper.fit")
 
 # By default, the upload limit is 5MB. It can be with this:
 # options(shiny.maxRequestSize = 9*1024^2)
@@ -8,7 +7,7 @@ shinyServer(function(input, output, clientData, session) {
     
     getData <- reactive({
         
-        inFile <- input$upload_testfile
+        inFile <- input$upload_file1
         out <- list()
         
         if (is.null(inFile))
@@ -26,15 +25,18 @@ shinyServer(function(input, output, clientData, session) {
                                                 if(is.null(df$corxz)) rep(0,nrows) else df$corxz,
                                                 if(is.null(df$coryz)) rep(0,nrows) else df$coryz
                                                 )
+            out[["X"]] <- matrix(c(df$x, df$y, df$z),nrows,ndims,byrow=FALSE)
+            colnames(out[["X"]]) <- c("x", "y", "z")
         }
         else if(ndims == 2) {
             out[["covarray"]] <- makecovarray2d(df$sx,
                                                 df$sy,
                                                 if(is.null(df$corxy)) rep(0,nrows) else df$corxy
                                                 )
+            out[["X"]] <- matrix(c(df$x, df$y),nrows,ndims,byrow=FALSE)
+            colnames(out[["X"]]) <- c("x", "y")
         }
         
-        out[["X"]] <- matrix(c(df$x, df$y, df$z),nrows,ndims,byrow=FALSE)
         out[["ndims"]] <- ndims
         
         return (out)
