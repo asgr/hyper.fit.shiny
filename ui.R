@@ -17,9 +17,12 @@ shinyUI(fluidPage(
                                        '.tsv'
                                    )
                          ),
+                         actionButton(inputId="plot_file1", label=span("Plot"), icon("bar-chart-o")),
                          tags$hr(),
                          h4("Examples"),
-                         actionButton(inputId="example_plot_FP6dFGS", label=span("FP6dFGS"), icon("bar-chart-o"))
+                         actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("bar-chart-o")),
+                         actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("bar-chart-o")),
+                         actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("bar-chart-o"))
                          ),
                      mainPanel(
                          plotOutput("hyper_fit_plot2d"),
