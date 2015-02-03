@@ -1,11 +1,12 @@
 shinyUI(fluidPage(
-    tags$head(tags$script(src="jquery-1.11.2.min.js")),
-    tags$head(tags$script(src="script.js")),
     titlePanel(title="hyper.fit"),
     tabsetPanel(
         tabPanel("Plot",
                  sidebarLayout(
                      sidebarPanel(
+                         h4("Options"),
+                         textInput("hyper", label = "Text input", value = "0.1"),
+                         tags$hr(),
                          h4("Upload Data"),
                          fileInput('upload_file1', 'Choose file to upload',
                                    accept = c(
@@ -25,11 +26,12 @@ shinyUI(fluidPage(
                          actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("bar-chart-o"))
                          ),
                      mainPanel(
-                         plotOutput("hyper_fit_plot2d"),
-                         webGLOutput("hyper_fit_plot3d", width="100%")
-                         )
+                         webGLOutput("hyper_fit_plot3d", width="100%"),
+                         plotOutput("hyper_fit_plot2d")
+                     )
                  ),
-                 br()
+                 br(),
+                 uiOutput("hyper_fit_summary")
         ),
         tabPanel("Info",
                  h3("About"),
@@ -37,5 +39,6 @@ shinyUI(fluidPage(
                    "This website is written in the programming language", strong("R"), "and uses the library", strong("Shiny"), "to provide
                    the interface.")
         )
-    )
+    ),
+    uiOutput("css_output")
 ))
