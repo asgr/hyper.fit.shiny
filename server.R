@@ -70,11 +70,31 @@ shinyServer(function(input, output, session) {
         }
     })
     
+    # make sure sigscale has a range to stop plot error
+    getSigscale <- reactive ({
+        min <- input$hyper_fit_sigscale[1]
+        max <- input$hyper_fit_sigscale[2]
+        if(min == max) {
+            if(max == 10) {
+                return (c(max-0.1, max))
+            }
+            return (c(min, min+0.1))
+        }
+        return (input$hyper_fit_sigscale)
+    })
+    
     # the 2d plot function
     output$hyper_fit_plot2d <- renderPlot({
         out <- getData()
         if(!is.null(out) && out$dims == 2) {
-            plot(out, dobar=TRUE)
+            
+            # plot output
+            plot(out,
+                 doellipse=input$hyper_fit_doellipse,
+                 sigscale=getSigscale(),
+                 trans=input$hyper_fit_trans,
+                 dobar=input$hyper_fit_dobar,
+                 position=input$hyper_fit_position) #add extra plot options here
         }
     })
     
@@ -82,12 +102,35 @@ shinyServer(function(input, output, session) {
     output$hyper_fit_plot3d <- renderWebGL({
         out <- getData()
         if(!is.null(out) && out$dims == 3) {
-            plot(out)
+            plot(out,
+                 doellipse=input$hyper_fit_doellipse,
+                 sigscale=getSigscale(),
+                 trans=input$hyper_fit_trans)
         }
         else {
             points3d(1,1,1)
             axes3d()
         }
+    })
+    
+    # the specs input field modifier
+    output$hyper_fit_selected_method <- renderUI({
+        
+        # get algsTable entry
+        alg <- input$hyper_fit_algo_func
+        if(alg=="optim")
+            method <- input$hyper_fit_optim_method
+        else if(alg=="LA")
+            method <- input$hyper_fit_LA_method
+        else if(alg=="LD")
+            method <- input$hyper_fit_LD_method
+        info <- algsTable[[alg]][[method]]
+        
+        # set the input fields according to the specs
+        
+        
+        # render the method being used
+        HTML("<span style='color:#AAAAAA;'>Using ", info$name, "</span>")
     })
     
     # the summary output
@@ -110,5 +153,50 @@ shinyServer(function(input, output, session) {
             tags$head(tags$style(HTML("#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:none;}")))
         }
     })
+    
+    # dataTable optim
+    output$methods_optim_algs = renderDataTable({
+        
+        # gather info from main table
+        acros <- sapply(algsTable$optim, function(alg) { alg[["alg"]] })
+        names <- sapply(algsTable$optim, function(alg) { alg[["name"]] })
+        links <- sapply(algsTable$optim, function(alg) { alg[["link"]] })
+        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        
+        # display data frame
+        df <- data.frame(acros, name_links)
+        colnames(df) <- c("Acronym","Link")
+        df
+    }, options = list(paging = FALSE, searching = FALSE))
+    
+    # dataTable LA
+    output$methods_LA_algs = renderDataTable({
+        
+        # gather info from main table
+        acros <- sapply(algsTable$LA, function(alg) { alg[["alg"]] })
+        names <- sapply(algsTable$LA, function(alg) { alg[["name"]] })
+        links <- sapply(algsTable$LA, function(alg) { alg[["link"]] })
+        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        
+        # display data frame
+        df <- data.frame(acros, name_links)
+        colnames(df) <- c("Acronym","Link")
+        df
+    }, options = list(paging = FALSE, searching = FALSE))
+    
+    # dataTable LD
+    output$methods_LD_algs = renderDataTable({
+        
+        # gather info from main table
+        acros <- sapply(algsTable$LD, function(alg) { alg[["alg"]] })
+        names <- sapply(algsTable$LD, function(alg) { alg[["name"]] })
+        links <- sapply(algsTable$LD, function(alg) { alg[["link"]] })
+        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        
+        # display data frame
+        df <- data.frame(acros, name_links)
+        colnames(df) <- c("Acronym","Link")
+        df
+    }, options = list(paging = FALSE, searching = FALSE))
     
 })
