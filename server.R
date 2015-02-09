@@ -51,7 +51,7 @@ shinyServer(function(input, output, session) {
                     }
                 },
                 error = function(e){
-                    updateTextInput(session, spec_id, value=paste0(spec_text, " - Error!"))
+                    updateTextInput(session, spec_id, value=paste0(spec_text, " - ERROR"))
                 })
             }
         }
@@ -177,8 +177,7 @@ shinyServer(function(input, output, session) {
         if(length(specs) > 0) {
             lapply(1:length(specs), function(i) {
                 spec_name <- specs[[i]]$spec
-                spec_label <- spec_name
-                textInput(paste0("hyper_fit_spec_",spec_name),label=spec_label,value=specs[[i]]$default)
+                textInput(paste0("hyper_fit_spec_",spec_name),label=spec_name,value=specs[[i]]$default)
             })
         }
     })

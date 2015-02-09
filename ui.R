@@ -4,7 +4,7 @@ shinyUI(fluidPage(
         tabPanel("Plot",
                  sidebarLayout(
                      sidebarPanel(
-                         actionButton(inputId="replot_plot", label=span("Replot"), icon("bar-chart-o")),
+                         actionButton(inputId="replot_plot", label=span("Recalculate"), icon("bar-chart-o")),
                          h4("Options"),
                          fluidRow(
                              column(6,

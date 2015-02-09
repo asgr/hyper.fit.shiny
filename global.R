@@ -15,6 +15,7 @@ usePackage("MASS")
 usePackage("rgl")
 usePackage("devtools")
 usePackage("shinyRGL")
+usePackage("mcmcplots")
 useGitPackage("LaplacesDemon", "Statisticat/LaplacesDemon")
 useGitPackage("hyper.fit", "asgr/hyper.fit")
 
@@ -138,12 +139,15 @@ algsTable = list(
                                           "CPUs"=list("spec"="CPUs","default"="1"),
                                           "Packages"=list("spec"="Packages","default"="NULL"),
                                           "Dyn.libs"=list("spec"="Dyn.libs","default"="NULL"))),
+        
+        # USES LENGTH
         "AHMC"       = list("name" = "Adaptive Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcahmc",
                             "alg"  = "AHMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"),
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
+        
         "AM"         = list("name" = "Adaptive Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcam",
                             "alg"  = "AM",
@@ -202,33 +206,43 @@ algsTable = list(
                                           "CPUs"=list("spec"="CPUs","default"="1"),
                                           "Packages"=list("spec"="Packages","default"="NULL"),
                                           "Dyn.libs"=list("spec"="Dyn.libs","default"="NULL"))),
+        
+        # USES LENGTH
         "HMC"        = list("name" = "Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"),
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"))),
+        
+        # REALLY SLOW ?
         "HMCDA"      = list("name" = "Hamiltonian Monte Carlo with Dual-Averaging",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMCDA",
                             "Specs"= list("A"=list("spec"="A","default"="500"),
                                           "delta"=list("spec"="delta","default"="0.65"),
-                                          "epsilon"=list("spec"="epsilon","default"="NULL"),
+                                          "epsilon"=list("spec"="epsilon","default"="NULL"), # scalar
                                           "Lmax"=list("spec"="Lmax","default"="1000"),
                                           "lambda"=list("spec"="lambda","default"="0.1"))),
+        
         "HARM"       = list("name" = "Hit-And-Run Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcharm",
                             "alg"  = "HARM",
                             "Specs"= list("alpha.star"=list("spec"="alpha.star","default"="0.234"),
                                           "B"=list("spec"="B","default"="NULL"))),
+        
+        # WHAT IS mu??
         "IM"         = list("name" = "Independence Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcim",
                             "alg"  = "IM",
                             "Specs"= list("mu"=list("spec"="mu","default"="Fit$Summary1[1:length(values_here),1]"))),
+        
+        # ERRORS
         "INCA"       = list("name" = "Interchain Adaptation",
                             "link" = "http://www.bayesian-inference.com/mcmcinca",
                             "alg"  = "INCA",
                             "Specs"= list("Adaptive"=list("spec"="Adaptive","default"="500"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
+        
         "MALA"       = list("name" = "Metropolis-Adjusted Langevin Algorithm",
                             "link" = "http://www.bayesian-inference.com/mcmcmala",
                             "alg"  = "MALA",
@@ -236,7 +250,7 @@ algsTable = list(
                                           "alpha.star"=list("spec"="alpha.star","default"="0.574"),
                                           "gamma"=list("spec"="gamma","default"="1"),
                                           "delta"=list("spec"="delta","default"="1"),
-                                          "epsilon"=list("spec"="epsilon","default"="c(1e-6,1e-7)"))),
+                                          "epsilon"=list("spec"="epsilon","default"="c(1e-6,1e-7)"))), # vector of length 2
         "MCMCMC"     = list("name" = "Metropolis-Coupled Markov Chain Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcmcmcmc",
                             "alg"  = "MCMCMC",
@@ -260,7 +274,7 @@ algsTable = list(
                             "alg"  = "NUTS",
                             "Specs"= list("A"=list("spec"="A","default"="500"),
                                           "delta"=list("spec"="delta","default"="0.6"),
-                                          "epsilon"=list("spec"="epsilon","default"="NULL"),
+                                          "epsilon"=list("spec"="epsilon","default"="NULL"), # scalar
                                           "Lmax"=list("spec"="Lmax","default"="Inf"))),
         "OHSS"       = list("name" = "Oblique Hyperrectangle Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcohss",
@@ -282,7 +296,7 @@ algsTable = list(
         "RDMH"       = list("name" = "Random Dive Metropolis-Hastings",
                             "link" = "http://www.bayesian-inference.com/mcmcrdmh",
                             "alg"  = "RDMH",
-                            "Specs"= list("B"=list("spec"="B","default"=""))),  # EXAMPLE USES NULL LIST
+                            "Specs"= list()),
         "Refractive" = list("name" = "Refractive Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcrefractive",
                             "alg"  = "Refractive",
@@ -301,40 +315,51 @@ algsTable = list(
         "RWM"        = list("name" = "Random-Walk Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcrwm",
                             "alg"  = "RWM",
-                            "Specs"= list("B"=list("spec"="B","default"=""))),  # USES NULL LIST
+                            "Specs"= list("B"=list("spec"="B","default"="NULL"))),
         "RSS"        = list("name" = "Reflective Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcrss",
                             "alg"  = "RSS",
                             "Specs"= list("m"=list("spec"="m","default"="5"),
                                           "w"=list("spec"="w","default"="1e-5"))),
+        
+        # WHAT IS DYN ??
         "SAMWG"      = list("name" = "Sequential Adaptive Metropolis-within-Gibbs",
                             "link" = "http://www.bayesian-inference.com/mcmcsamwg",
                             "alg"  = "SAMWG",
                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
                                           "Periodicity"=list("spec"="Periodicity","default"="50"))),
+        
+        # WHAT IS DYN ??
         "SMWG"       = list("name" = "Sequential Metropolis-within-Gibbs",
                             "link" = "http://www.bayesian-inference.com/mcmcsmwg",
                             "alg"  = "SMWG",
                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"))),
+        
         "Slice"      = list("name" = "Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcslice",
                             "alg"  = "Slice",
                             "Specs"= list("m"=list("spec"="m","default"="Inf"),
-                                          "w"=list("spec"="w","default"="w"))),
+                                          "w"=list("spec"="w","default"="1"))),
+        
+        # HOW IS FILE USED??
         "SGLD"       = list("name" = "Stochastic Gradient Langevin Dynamics",
                             "link" = "http://www.bayesian-inference.com/mcmcsgld",
                             "alg"  = "SGLD",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="1e-4"),
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="1e-4"), # either scalar or vector
                                           "file"=list("spec"="file","default"="X.csv"),
                                           "Nr"=list("spec"="Nr","default"="1e4"),
                                           "Nc"=list("spec"="Nc","default"="6"),
                                           "size"=list("spec"="size","default"="10"))),
+        
+        # USES LENGTH
         "THMC"       = list("name" = "Tempered Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcthmc",
                             "alg"  = "THMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="=rep(0.05,length(values_here))"),
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05,length(values_here))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
+        
+        # ERRORS
         "twalk"      = list("name" = "t-walk",
                             "link" = "http://www.bayesian-inference.com/mcmctwalk",
                             "alg"  = "twalk",
@@ -342,6 +367,7 @@ algsTable = list(
                                           "n1"=list("spec"="n1","default"="4"),
                                           "at"=list("spec"="at","default"="6"),
                                           "aw"=list("spec"="aw","default"="1.5"))),
+        
         "UESS"       = list("name" = "Univariate Eigenvector Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcuess",
                             "alg"  = "UESS",
@@ -349,6 +375,8 @@ algsTable = list(
                                           "B"=list("spec"="B","default"="NULL"),
                                           "m"=list("spec"="m","default"="100"),
                                           "n"=list("spec"="n","default"="0"))),
+        
+        # WHAT IS DYN ??
         "USAMWG"     = list("name" = "Updating Sequential Adaptive Metropolis-within-Gibbs",
                             "link" = "http://www.bayesian-inference.com/mcmcusamwg",
                             "alg"  = "USAMWG",
@@ -356,6 +384,8 @@ algsTable = list(
                                           "Periodicity"=list("spec"="Periodicity","default"="50"),
                                           "Fit"=list("spec"="Fit","default"="Fit"),
                                           "Begin"=list("spec"="Begin","default"="T.m"))),
+        
+        # WHAT IS DYN ??
         "USMWG"      = list("name" = "Updating Sequential Metropolis-within-Gibbs",
                             "link" = "http://www.bayesian-inference.com/mcmcusmwg",
                             "alg"  = "USMWG",
