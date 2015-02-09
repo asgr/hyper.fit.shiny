@@ -4,6 +4,7 @@ shinyUI(fluidPage(
         tabPanel("Plot",
                  sidebarLayout(
                      sidebarPanel(
+                         actionButton(inputId="replot_plot", label=span("Replot"), icon("bar-chart-o")),
                          h4("Options"),
                          fluidRow(
                              column(6,
@@ -42,21 +43,14 @@ shinyUI(fluidPage(
                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
                                           checkboxInput(inputId="hyper_fit_show_specs", label="Show Specs", value=FALSE),
                                           conditionalPanel(condition="input.hyper_fit_show_specs == true",
-                                                           fluidRow(
-                                                               column(6,
-                                                                      textInput("hyper", label = "Text input", value = "0.1")
-                                                               ),
-                                                               column(6,
-                                                                      textInput("hyper2", label = "Text input", value = "0.1")
-                                                               )
-                                                           )
+                                                           uiOutput("hyper_fit_specs_inputs")
                                           )
                          ),
                          tags$hr(),
                          h4("Plot Options"),
                          fluidRow(
                              column(6,
-                                    sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0, max=10, value=c(0,4), step=0.1),
+                                    sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1),
                                     checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE)
                              ),
                              column(6,
@@ -105,11 +99,11 @@ shinyUI(fluidPage(
                          ),
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
-                         plotOutput("hyper_fit_plot2d")
+                         plotOutput("hyper_fit_plot2d"),
+                         plotOutput("hyper_fit_plotPosterior"),
+                         uiOutput("hyper_fit_summary")
                      )
                  ),
-                 br(),
-                 uiOutput("hyper_fit_summary"),
                  br(),br(),br()
         ),
         tabPanel("Methods",

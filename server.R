@@ -22,19 +22,62 @@ shinyServer(function(input, output, session) {
     # function for getting plot data
     getData <- reactive({
         
+        # make reactive
+        input$replot_plot
+        
+        # get the algortithm/method
+        algo.func <- isolate(input$hyper_fit_algo_func)
+        algo.method <- isolate(getMethod()$alg)
+        
+        # get specs
+        Specs <- list()
+        spec_list <- isolate(getSpecs())
+        if(length(spec_list) > 0) {
+            for(i in 1:length(spec_list)) {
+                spec_name <- spec_list[[i]]$spec
+                spec_id <- paste0("hyper_fit_spec_",spec_name)
+                spec_text <- isolate(input[[spec_id]])
+                if(is.null(spec_text) || nchar(spec_text)==0) {
+                    spec_text <- spec_list[[i]]$default
+                    updateTextInput(session, spec_id, value=paste0(spec_list[[i]]$default))
+                }
+                tryCatch({
+                    ev <- eval(parse(text=spec_text))
+                    if(is.null(ev)) {
+                        Specs[spec_name] <- list(NULL)
+                    }
+                    else {
+                        Specs[[spec_name]] <- ev
+                    }
+                },
+                error = function(e){
+                    updateTextInput(session, spec_id, value=paste0(spec_text, " - Error!"))
+                })
+            }
+        }
+        
         # check if example buttons were pressed
         if(actions$last == 'example_plot_TFR') {
             return (hyper.fit(X=TFR[,c("logv", "M_K")],
-                              vars=TFR[,c("logv_err", "M_K_err")]^2))
+                              vars=TFR[,c("logv_err", "M_K_err")]^2,
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs))
         }
         else if(actions$last == 'example_plot_MJB') {
             return (hyper.fit(X=MJB[,c("logM", "logj", "B.T")],
-                              covarray=makecovarray3d(MJB$logM_err, MJB$logj_err, MJB$B.T_err, MJB$corMJ, 0, 0)))
+                              covarray=makecovarray3d(MJB$logM_err, MJB$logj_err, MJB$B.T_err, MJB$corMJ, 0, 0),
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs))
         }
         else if(actions$last == 'example_plot_GAMAsmVsize') {
             return (hyper.fit(X=GAMAsmVsize[,c("logmstar", "logrekpc")],
                               vars=GAMAsmVsize[,c("logmstar_err", "logrekpc_err")]^2,
-                              weights=GAMAsmVsize[,"weights"]))
+                              weights=GAMAsmVsize[,"weights"],
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs))
         }
         else {
             inFile <- input$upload_file1
@@ -66,21 +109,11 @@ shinyServer(function(input, output, session) {
                 colnames(X) <- c("x", "y")
             }
             
-            return (hyper.fit(X=X, covarray=covarray))
+            return (hyper.fit(X=X, covarray=covarray,
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs))
         }
-    })
-    
-    # make sure sigscale has a range to stop plot error
-    getSigscale <- reactive ({
-        min <- input$hyper_fit_sigscale[1]
-        max <- input$hyper_fit_sigscale[2]
-        if(min == max) {
-            if(max == 10) {
-                return (c(max-0.1, max))
-            }
-            return (c(min, min+0.1))
-        }
-        return (input$hyper_fit_sigscale)
     })
     
     # the 2d plot function
@@ -91,7 +124,7 @@ shinyServer(function(input, output, session) {
             # plot output
             plot(out,
                  doellipse=input$hyper_fit_doellipse,
-                 sigscale=getSigscale(),
+                 sigscale=c(0,input$hyper_fit_sigscale),
                  trans=input$hyper_fit_trans,
                  dobar=input$hyper_fit_dobar,
                  position=input$hyper_fit_position) #add extra plot options here
@@ -104,7 +137,7 @@ shinyServer(function(input, output, session) {
         if(!is.null(out) && out$dims == 3) {
             plot(out,
                  doellipse=input$hyper_fit_doellipse,
-                 sigscale=getSigscale(),
+                 sigscale=c(0,input$hyper_fit_sigscale),
                  trans=input$hyper_fit_trans)
         }
         else {
@@ -113,10 +146,16 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    # the specs input field modifier
-    output$hyper_fit_selected_method <- renderUI({
-        
-        # get algsTable entry
+    # the Posterior1 plot
+    output$hyper_fit_plotPosterior <- renderPlot({
+        out <- getData()
+        if(!is.null(out) && out$args$algo.func=="LD") {
+            plot(as.mcmc(out$fit$Posterior1))
+        }
+    })
+    
+    # gets the selected method
+    getMethod <- reactive ({
         alg <- input$hyper_fit_algo_func
         if(alg=="optim")
             method <- input$hyper_fit_optim_method
@@ -124,13 +163,29 @@ shinyServer(function(input, output, session) {
             method <- input$hyper_fit_LA_method
         else if(alg=="LD")
             method <- input$hyper_fit_LD_method
-        info <- algsTable[[alg]][[method]]
-        
-        # set the input fields according to the specs
-        
-        
-        # render the method being used
-        HTML("<span style='color:#AAAAAA;'>Using ", info$name, "</span>")
+        return(algsTable[[alg]][[method]])
+    })
+    
+    # gets the selected specs
+    getSpecs <- reactive ({
+        return(getMethod()$Specs)
+    })
+    
+    # render the inputs required for the chosen method
+    output$hyper_fit_specs_inputs <- renderUI ({
+        specs <- getSpecs()
+        if(length(specs) > 0) {
+            lapply(1:length(specs), function(i) {
+                spec_name <- specs[[i]]$spec
+                spec_label <- spec_name
+                textInput(paste0("hyper_fit_spec_",spec_name),label=spec_label,value=specs[[i]]$default)
+            })
+        }
+    })
+    
+    # render the method being used
+    output$hyper_fit_selected_method <- renderUI({
+        HTML("<span style='color:#AAAAAA;'>Using ", getMethod()$name, "</span>")
     })
     
     # the summary output
@@ -145,13 +200,22 @@ shinyServer(function(input, output, session) {
     # css changes to change the layout
     output$css_output <- renderUI({
         out <- getData()
-        if(!is.null(out) && out$dims == 2) {
-            tags$head(tags$style(HTML("#hyper_fit_plot2d {display:block;} #hyper_fit_plot3d {display:none;}")))
-        } else if(!is.null(out) && out$dims == 3) {
-            tags$head(tags$style(HTML("#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:block;}")))
+        css <- ""
+        if(is.null(out)) {
+            css <- "#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:none;} #hyper_fit_plotPosterior {display:none;}"
         } else {
-            tags$head(tags$style(HTML("#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:none;}")))
+            if(out$dims == 2) {
+                css <- "#hyper_fit_plot2d {display:block;} #hyper_fit_plot3d {display:none;}"
+            } else if(out$dims == 3) {
+                css <- "#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:block;}"
+            }
+            if(out$args$algo.func=="LD") {
+                css <- append(css, "#hyper_fit_plotPosterior {display:block;}")
+            } else {
+                css <- append(css, "#hyper_fit_plotPosterior {display:none;}")
+            }
         }
+        tags$head(tags$style(HTML(css)))
     })
     
     # dataTable optim
