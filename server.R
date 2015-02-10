@@ -1,6 +1,7 @@
 shinyServer(function(input, output, session) {
     
-    # the program must check which button was last pressed
+    # Data Selection Listeners #
+    ############################
     actions <- reactiveValues(last = "none")
     observe({
         if (input$plot_file1 != 0 || !is.null(input$upload_file1))
@@ -19,11 +20,12 @@ shinyServer(function(input, output, session) {
             actions$last <- 'example_plot_GAMAsmVsize'
     })
     
-    # function for getting plot data
-    getData <- reactive({
+    # hyper.fit calculation #
+    #########################
+    fit_result <- reactive({
         
         # make reactive
-        input$replot_plot
+        input$hyper_fit_calculate
         
         # get the algortithm/method
         algo.func <- isolate(input$hyper_fit_algo_func)
@@ -116,24 +118,24 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    # the 2d plot function
+    # 2d plot function #
+    ####################
     output$hyper_fit_plot2d <- renderPlot({
-        out <- getData()
+        out <- fit_result()
         if(!is.null(out) && out$dims == 2) {
-            
-            # plot output
             plot(out,
                  doellipse=input$hyper_fit_doellipse,
                  sigscale=c(0,input$hyper_fit_sigscale),
                  trans=input$hyper_fit_trans,
                  dobar=input$hyper_fit_dobar,
-                 position=input$hyper_fit_position) #add extra plot options here
+                 position=input$hyper_fit_position)
         }
     })
     
-    # the 3d plot function
+    # 3d plot function #
+    ####################
     output$hyper_fit_plot3d <- renderWebGL({
-        out <- getData()
+        out <- fit_result()
         if(!is.null(out) && out$dims == 3) {
             plot(out,
                  doellipse=input$hyper_fit_doellipse,
@@ -141,20 +143,23 @@ shinyServer(function(input, output, session) {
                  trans=input$hyper_fit_trans)
         }
         else {
+            # fixes a shinyRGL bug
             points3d(1,1,1)
             axes3d()
         }
     })
     
-    # the Posterior1 plot
+    # Posterior1 plot function (LD only) #
+    ######################################
     output$hyper_fit_plotPosterior <- renderPlot({
-        out <- getData()
+        out <- fit_result()
         if(!is.null(out) && out$args$algo.func=="LD") {
             plot(as.mcmc(out$fit$Posterior1))
         }
     })
     
-    # gets the selected method
+    # function to get the current method #
+    ######################################
     getMethod <- reactive ({
         alg <- input$hyper_fit_algo_func
         if(alg=="optim")
@@ -166,12 +171,14 @@ shinyServer(function(input, output, session) {
         return(algsTable[[alg]][[method]])
     })
     
-    # gets the selected specs
+    # function to get the method's spec list #
+    ##########################################
     getSpecs <- reactive ({
         return(getMethod()$Specs)
     })
     
-    # render the inputs required for the chosen method
+    # Specs input fields #
+    ######################
     output$hyper_fit_specs_inputs <- renderUI ({
         specs <- getSpecs()
         if(length(specs) > 0) {
@@ -182,23 +189,26 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    # render the method being used
+    # Render current method #
+    #########################
     output$hyper_fit_selected_method <- renderUI({
         HTML("<span style='color:#AAAAAA;'>Using ", getMethod()$name, "</span>")
     })
     
-    # the summary output
+    # Summary output #
+    ##################
     output$hyper_fit_summary <- renderUI({
-        out <- getData()
+        out <- fit_result()
         if(!is.null(out)) {
             s <- capture.output(summary(out))
             HTML("<h4>Summary</h4>", paste(as.list(s), collapse="<br/>"))
         }
     })
     
-    # css changes to change the layout
+    # CSS output (used to show/hide plots) #
+    ########################################
     output$css_output <- renderUI({
-        out <- getData()
+        out <- fit_result()
         css <- ""
         if(is.null(out)) {
             css <- "#hyper_fit_plot2d {display:none;} #hyper_fit_plot3d {display:none;} #hyper_fit_plotPosterior {display:none;}"
@@ -217,7 +227,8 @@ shinyServer(function(input, output, session) {
         tags$head(tags$style(HTML(css)))
     })
     
-    # dataTable optim
+    # Methods tab - optim table #
+    #############################
     output$methods_optim_algs = renderDataTable({
         
         # gather info from main table
@@ -232,7 +243,8 @@ shinyServer(function(input, output, session) {
         df
     }, options = list(paging = FALSE, searching = FALSE))
     
-    # dataTable LA
+    # Methods tab - LA table #
+    ##########################
     output$methods_LA_algs = renderDataTable({
         
         # gather info from main table
@@ -247,7 +259,8 @@ shinyServer(function(input, output, session) {
         df
     }, options = list(paging = FALSE, searching = FALSE))
     
-    # dataTable LD
+    # Methods tab - LD table #
+    ##########################
     output$methods_LD_algs = renderDataTable({
         
         # gather info from main table

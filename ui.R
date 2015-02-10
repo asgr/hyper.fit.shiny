@@ -4,7 +4,7 @@ shinyUI(fluidPage(
         tabPanel("Plot",
                  sidebarLayout(
                      sidebarPanel(
-                         actionButton(inputId="replot_plot", label=span("Recalculate"), icon("bar-chart-o")),
+                         actionButton(inputId="hyper_fit_calculate", label=span("Recalculate"), icon("bar-chart-o")),
                          h4("Options"),
                          fluidRow(
                              column(6,
@@ -90,12 +90,12 @@ shinyUI(fluidPage(
                                        '.tsv'
                                    )
                          ),
-                         actionButton(inputId="plot_file1", label=span("Plot"), icon("bar-chart-o")),
+                         actionButton(inputId="plot_file1", label=span("Use"), icon("file-text")),
                          tags$hr(),
                          h4("Examples"),
-                         actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("bar-chart-o")),
-                         actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("bar-chart-o")),
-                         actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("bar-chart-o"))
+                         actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),
+                         actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("file-text")),
+                         actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
                          ),
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
