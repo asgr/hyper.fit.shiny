@@ -4,7 +4,7 @@ shinyServer(function(input, output, session) {
     ############################
     actions <- reactiveValues(last = "none")
     observe({
-        if (input$plot_file1 != 0 || !is.null(input$upload_file1))
+        if (input$plot_file1 != 0)
             actions$last <- 'plot_file1'
     })
     observe({
