@@ -4,8 +4,16 @@ shinyUI(fluidPage(
         tabPanel("Plot",
                  sidebarLayout(
                      sidebarPanel(
-                         actionButton(inputId="hyper_fit_calculate", label=span("Recalculate"), icon("bar-chart-o")),
-                         h4("Options"),
+                         fluidRow(
+                             column(6,
+                                    actionButton(inputId="hyper_fit_calculate", label=span("Recalculate"), icon("bar-chart-o"))
+                                    ),
+                             column(6,
+                                    uiOutput("hyper_fit_data_used")
+                                    )
+                             ),
+                         tags$hr(),
+                         h4("Algorithm"),
                          fluidRow(
                              column(6,
                                     selectInput(inputId="hyper_fit_algo_func",
@@ -96,7 +104,7 @@ shinyUI(fluidPage(
                          ),
                          actionButton(inputId="plot_file1", label=span("Use"), icon("file-text")),
                          tags$hr(),
-                         h4("Examples"),
+                         h4("Example Data"),
                          actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),
                          actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("file-text")),
                          actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))

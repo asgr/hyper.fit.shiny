@@ -20,6 +20,23 @@ shinyServer(function(input, output, session) {
             actions$last <- 'example_plot_GAMAsmVsize'
     })
     
+    # Selected Data UI #
+    ####################
+    output$hyper_fit_data_used <- renderUI ({
+        if(actions$last=="plot_file1") {
+            HTML("<span style='color:#AAAAAA;'>Using ", input$upload_file1$name, "</span>")
+        }
+        else if(actions$last=="example_plot_TFR") {
+            HTML("<span style='color:#AAAAAA;'>Using TFR</span>")
+        }
+        else if(actions$last=="example_plot_MJB") {
+            HTML("<span style='color:#AAAAAA;'>Using MJB</span>")
+        }
+        else if(actions$last=="example_plot_GAMAsmVsize") {
+            HTML("<span style='color:#AAAAAA;'>Using GAMAsmVsize</span>")
+        }
+    })
+    
     # hyper.fit calculation #
     #########################
     fit_result <- reactive({
