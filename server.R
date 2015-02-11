@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
                 spec_text <- isolate(input[[spec_id]])
                 if(is.null(spec_text) || nchar(spec_text)==0) {
                     spec_text <- spec_list[[i]]$default
-                    updateTextInput(session, spec_id, value=paste0(spec_list[[i]]$default))
+                    updateTextInput(session, spec_id, value=spec_list[[i]]$default)
                 }
                 tryCatch({
                     ev <- eval(parse(text=spec_text))
@@ -70,7 +70,7 @@ shinyServer(function(input, output, session) {
                     }
                 },
                 error = function(e){
-                    stop(paste0(spec_name, " has invalid argument"))
+                    stop(paste0(spec_name, " has an invalid argument"))
                 })
             }
         }
