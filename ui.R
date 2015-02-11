@@ -80,6 +80,17 @@ shinyUI(fluidPage(
                          ),
                          tags$hr(),
                          h4("Upload Data"),
+                         fluidRow(
+                             column(6,
+                                    selectInput(inputId="file1_separator", label="File type", choices=list("csv"=",",
+                                                                                                           "tsv"="\t",
+                                                                                                           "ssv"=" "),
+                                                selected=" ")
+                             ),
+                             column(6,
+                                    actionButton(inputId="plot_file1", label=span("Use"), icon("file-text"))
+                             )
+                         ),
                          fileInput('upload_file1', 'Choose file to upload',
                                    accept = c(
                                        'text/csv',
@@ -90,7 +101,6 @@ shinyUI(fluidPage(
                                        '.tsv'
                                    )
                          ),
-                         actionButton(inputId="plot_file1", label=span("Use"), icon("file-text")),
                          tags$hr(),
                          h4("Examples"),
                          actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),

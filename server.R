@@ -81,18 +81,23 @@ shinyServer(function(input, output, session) {
                               algo.method=algo.method,
                               Specs=Specs))
         }
-        else {
+        else if(actions$last == 'plot_file1') {
+            
+            # get inputs
             inFile <- input$upload_file1
+            sep <- isolate(input$file1_separator)
             if (is.null(inFile)) {
                 return(NULL)
             }
             
-            df <- read.table(inFile$datapath, header=TRUE, sep=" ", dec=".")
+            # read in data from file
+            df <- read.table(inFile$datapath, header=TRUE, sep=sep, dec=".")
             if(!is.null(df$x) && !is.null(df$y) && !is.null(df$z)) {ndims <- 3}
             else if(!is.null(df$x) && !is.null(df$y)) {ndims <- 2}
             else {stop("Input file needs x and y dimensions.")}
             nrows <- nrow(df)
             
+            # construct either 3d data or 2d data
             if(ndims == 3) {
                 covarray <- makecovarray3d (if(is.null(df$sx)) rep(0, nrows) else df$sx,
                                             if(is.null(df$sy)) rep(0, nrows) else df$sy,
@@ -116,6 +121,8 @@ shinyServer(function(input, output, session) {
                               algo.method=algo.method,
                               Specs=Specs))
         }
+        
+        return (NULL)
     })
     
     # 2d plot function #
