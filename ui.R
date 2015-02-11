@@ -58,13 +58,13 @@ shinyUI(fluidPage(
                          h4("Plot Options"),
                          fluidRow(
                              column(6,
-                                    sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1),
-                                    checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE)
+                                    sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
                              ),
                              column(6,
                                     sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0, max=1, value=1, step=0.05, ticks=FALSE)
                              )
                          ),
+                         checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),
                          tags$hr(),
                          h5("2D only"),
                          fluidRow(
