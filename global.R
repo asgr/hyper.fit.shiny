@@ -177,7 +177,7 @@ algsTable = list(
         "CHARM"      = list("name" = "Componentwise Hit-And-Run Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmccharm",
                             "alg"  = "CHARM",
-                            "Specs"= list("alpha.star"=list("spec"="alpha.star","default"="0.44"))), # WHAT TO DO HERE???
+                            "Specs"= list("alpha.star"=list("spec"="alpha.star","default"="0.44"))),
         "DRAM"       = list("name" = "Delayed Rejection Adaptive Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcdram",
                             "alg"  = "DRAM",
