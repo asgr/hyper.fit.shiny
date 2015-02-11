@@ -180,7 +180,7 @@ shinyServer(function(input, output, session) {
         if(!is.null(out) && out$args$algo.func=="LD") {
             plot(as.mcmc(out$fit$Posterior1))
         }
-    })
+    }, height=600) # FIX THIS
     
     # function to get the current method #
     ######################################
@@ -199,6 +199,17 @@ shinyServer(function(input, output, session) {
     ##########################################
     getSpecs <- reactive ({
         return(getMethod()$Specs)
+    })
+    
+    # Specs label field #
+    #####################
+    output$hyper_fit_specs_label <- renderText ({
+        if(input$hyper_fit_show_specs==TRUE) {
+            "Specs ="
+        }
+        else {
+            "Specs = NULL"
+        }
     })
     
     # Specs input fields #

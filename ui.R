@@ -49,7 +49,7 @@ shinyUI(fluidPage(
                          uiOutput("hyper_fit_selected_method"),
                          br(),
                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
-                                          checkboxInput(inputId="hyper_fit_show_specs", label="Specs =", value=FALSE),
+                                          checkboxInput(inputId="hyper_fit_show_specs", label=textOutput("hyper_fit_specs_label"), value=FALSE),
                                           conditionalPanel(condition="input.hyper_fit_show_specs == true",
                                                            uiOutput("hyper_fit_specs_inputs")
                                           )
@@ -112,7 +112,7 @@ shinyUI(fluidPage(
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
-                         plotOutput("hyper_fit_plotPosterior"),
+                         plotOutput("hyper_fit_plotPosterior", height="auto"),
                          uiOutput("hyper_fit_summary")
                      )
                  ),

@@ -139,12 +139,10 @@ algsTable = list(
                                           "CPUs"=list("spec"="CPUs","default"="1"),
                                           "Packages"=list("spec"="Packages","default"="NULL"),
                                           "Dyn.libs"=list("spec"="Dyn.libs","default"="NULL"))),
-        
-        # USES LENGTH
         "AHMC"       = list("name" = "Adaptive Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcahmc",
                             "alg"  = "AHMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # can accept vector
                                           "L"=list("spec"="L","default"="2"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
         
@@ -206,24 +204,19 @@ algsTable = list(
                                           "CPUs"=list("spec"="CPUs","default"="1"),
                                           "Packages"=list("spec"="Packages","default"="NULL"),
                                           "Dyn.libs"=list("spec"="Dyn.libs","default"="NULL"))),
-        
-        # USES LENGTH
         "HMC"        = list("name" = "Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="0.02"), # can accept vector
                                           "L"=list("spec"="L","default"="2"))),
-        
-        # REALLY SLOW ?
         "HMCDA"      = list("name" = "Hamiltonian Monte Carlo with Dual-Averaging",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMCDA",
                             "Specs"= list("A"=list("spec"="A","default"="500"),
                                           "delta"=list("spec"="delta","default"="0.65"),
                                           "epsilon"=list("spec"="epsilon","default"="NULL"), # scalar
-                                          "Lmax"=list("spec"="Lmax","default"="1000"),
+                                          "Lmax"=list("spec"="Lmax","default"="1"),
                                           "lambda"=list("spec"="lambda","default"="0.1"))),
-        
         "HARM"       = list("name" = "Hit-And-Run Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcharm",
                             "alg"  = "HARM",
@@ -350,12 +343,10 @@ algsTable = list(
                                           "Nr"=list("spec"="Nr","default"="1e4"),
                                           "Nc"=list("spec"="Nc","default"="6"),
                                           "size"=list("spec"="size","default"="10"))),
-        
-        # USES LENGTH
         "THMC"       = list("name" = "Tempered Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcthmc",
                             "alg"  = "THMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05,length(Initial.Values))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="0.05"), # can accept vector
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
         
