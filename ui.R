@@ -137,5 +137,5 @@ shinyUI(fluidPage(
                  br(),br(),br()
         )
     ),
-    uiOutput("css_output")
+    uiOutput("css_output_plots")
 ))

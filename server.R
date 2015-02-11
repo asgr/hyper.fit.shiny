@@ -70,7 +70,7 @@ shinyServer(function(input, output, session) {
                     }
                 },
                 error = function(e){
-                    updateTextInput(session, spec_id, value=paste0(spec_text, " - ERROR"))
+                    stop(paste0(spec_name, " has invalid argument"))
                 })
             }
         }
@@ -231,7 +231,7 @@ shinyServer(function(input, output, session) {
     
     # CSS output (used to show/hide plots) #
     ########################################
-    output$css_output <- renderUI({
+    output$css_output_plots <- renderUI({
         out <- fit_result()
         css <- ""
         if(is.null(out)) {

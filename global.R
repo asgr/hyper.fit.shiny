@@ -144,7 +144,7 @@ algsTable = list(
         "AHMC"       = list("name" = "Adaptive Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcahmc",
                             "alg"  = "AHMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
         
@@ -168,7 +168,7 @@ algsTable = list(
         "AIES"       = list("name" = "Affine-Invariant Ensemble Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcaies",
                             "alg"  = "AIES",
-                            "Specs"= list("Nc"=list("spec"="Nc","default"="2*length(values_here)"),
+                            "Specs"= list("Nc"=list("spec"="Nc","default"="2*length(Initial.Values)"),
                                           "Z"=list("spec"="Z","default"="NULL"),
                                           "beta"=list("spec"="beta","default"="2"),
                                           "CPUs"=list("spec"="CPUs","default"="1"),
@@ -211,7 +211,7 @@ algsTable = list(
         "HMC"        = list("name" = "Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(values_here))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"))),
         
         # REALLY SLOW ?
@@ -234,7 +234,7 @@ algsTable = list(
         "IM"         = list("name" = "Independence Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcim",
                             "alg"  = "IM",
-                            "Specs"= list("mu"=list("spec"="mu","default"="Fit$Summary1[1:length(values_here),1]"))),
+                            "Specs"= list("mu"=list("spec"="mu","default"="Fit$Summary1[1:length(Initial.Values),1]"))),
         
         # ERRORS
         "INCA"       = list("name" = "Interchain Adaptation",
@@ -355,7 +355,7 @@ algsTable = list(
         "THMC"       = list("name" = "Tempered Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcthmc",
                             "alg"  = "THMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05,length(values_here))"), # vector of length Initial.Values
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05,length(Initial.Values))"), # vector of length Initial.Values
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
         
