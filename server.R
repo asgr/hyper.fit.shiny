@@ -24,16 +24,16 @@ shinyServer(function(input, output, session) {
     ####################
     output$hyper_fit_data_used <- renderUI ({
         if(actions$last=="plot_file1") {
-            HTML("<span style='color:#AAAAAA;'>Using ", input$upload_file1$name, "</span>")
+            HTML("<span style='color:#888888;'>Using ", input$upload_file1$name, "</span>")
         }
         else if(actions$last=="example_plot_TFR") {
-            HTML("<span style='color:#AAAAAA;'>Using TFR</span>")
+            HTML("<span style='color:#888888;'>Using TFR</span>")
         }
         else if(actions$last=="example_plot_MJB") {
-            HTML("<span style='color:#AAAAAA;'>Using MJB</span>")
+            HTML("<span style='color:#888888;'>Using MJB</span>")
         }
         else if(actions$last=="example_plot_GAMAsmVsize") {
-            HTML("<span style='color:#AAAAAA;'>Using GAMAsmVsize</span>")
+            HTML("<span style='color:#888888;'>Using GAMAsmVsize</span>")
         }
     })
     
@@ -173,6 +173,14 @@ shinyServer(function(input, output, session) {
         }
     })
     
+    posterior1_plot_height <- function() {
+        fit <- fit_result()
+        if(!is.null(fit)) {
+            return ((fit$dims+1) * 200)
+        }
+        return (600)
+    }
+    
     # Posterior1 plot function (LD only) #
     ######################################
     output$hyper_fit_plotPosterior <- renderPlot({
@@ -180,7 +188,7 @@ shinyServer(function(input, output, session) {
         if(!is.null(out) && out$args$algo.func=="LD") {
             plot(as.mcmc(out$fit$Posterior1))
         }
-    }, height=600) # FIX THIS
+    }, height=posterior1_plot_height) # FIX THIS
     
     # function to get the current method #
     ######################################
@@ -227,7 +235,7 @@ shinyServer(function(input, output, session) {
     # Render current method #
     #########################
     output$hyper_fit_selected_method <- renderUI({
-        HTML("<span style='color:#AAAAAA;'>Using ", getMethod()$name, "</span>")
+        HTML("<span style='color:#888888;'>Using ", getMethod()$name, "</span>")
     })
     
     # Summary output #
