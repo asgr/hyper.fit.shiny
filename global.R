@@ -142,7 +142,7 @@ algsTable = list(
         "AHMC"       = list("name" = "Adaptive Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcahmc",
                             "alg"  = "AHMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, length(Initial.Values))"), # can accept vector
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, 3)"), # can accept vector
                                           "L"=list("spec"="L","default"="2"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
         
@@ -166,7 +166,7 @@ algsTable = list(
         "AIES"       = list("name" = "Affine-Invariant Ensemble Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcaies",
                             "alg"  = "AIES",
-                            "Specs"= list("Nc"=list("spec"="Nc","default"="2*length(Initial.Values)"),
+                            "Specs"= list("Nc"=list("spec"="Nc","default"="6"),
                                           "Z"=list("spec"="Z","default"="NULL"),
                                           "beta"=list("spec"="beta","default"="2"),
                                           "CPUs"=list("spec"="CPUs","default"="1"),
@@ -207,7 +207,7 @@ algsTable = list(
         "HMC"        = list("name" = "Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
                             "alg"  = "HMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="0.02"), # can accept vector
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, 3)"), # can accept vector
                                           "L"=list("spec"="L","default"="2"))),
         "HMCDA"      = list("name" = "Hamiltonian Monte Carlo with Dual-Averaging",
                             "link" = "http://www.bayesian-inference.com/mcmchmc",
@@ -222,12 +222,10 @@ algsTable = list(
                             "alg"  = "HARM",
                             "Specs"= list("alpha.star"=list("spec"="alpha.star","default"="0.234"),
                                           "B"=list("spec"="B","default"="NULL"))),
-        
-        # WHAT IS mu??
         "IM"         = list("name" = "Independence Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcim",
                             "alg"  = "IM",
-                            "Specs"= list("mu"=list("spec"="mu","default"="Fit$Summary1[1:length(Initial.Values),1]"))),
+                            "Specs"= list("mu"=list("spec"="mu","default"="rep(1, 3)"))), # vector of length Initial.Values
         
         # ERRORS
         "INCA"       = list("name" = "Interchain Adaptation",
@@ -346,7 +344,7 @@ algsTable = list(
         "THMC"       = list("name" = "Tempered Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcthmc",
                             "alg"  = "THMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="0.05"), # can accept vector
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05, 3)"), # can accept vector
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
         

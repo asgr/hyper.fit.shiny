@@ -13,102 +13,112 @@ shinyUI(fluidPage(
                                     )
                              ),
                          tags$hr(),
-                         h4("Algorithm"),
-                         fluidRow(
-                             column(6,
-                                    selectInput(inputId="hyper_fit_algo_func",
-                                                label="Algorithm",
-                                                choices=list(
-                                                    "optim"="optim",
-                                                    "LA"="LA",
-                                                    "LD"="LD"
-                                                    ),
-                                                selected="optim")
-                                    ),
-                             column(6,
-                                    conditionalPanel(condition="input.hyper_fit_algo_func == 'optim'",
-                                                     selectInput(inputId="hyper_fit_optim_method",
-                                                                 label="Method",
-                                                                 choices=names(algsTable$optim),
-                                                                 selected="Nelder-Mead")
-                                    ),
-                                    conditionalPanel(condition="input.hyper_fit_algo_func == 'LA'",
-                                                     selectInput(inputId="hyper_fit_LA_method",
-                                                                 label="Method",
-                                                                 choices=names(algsTable$LA),
-                                                                 selected="NM")
-                                    ),
-                                    conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
-                                                     selectInput(inputId="hyper_fit_LD_method",
-                                                                 label="Method",
-                                                                 choices=names(algsTable$LD),
-                                                                 selected="CHARM")
-                                    )
-                                    )
-                             ),
-                         uiOutput("hyper_fit_selected_method"),
-                         br(),
-                         conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
-                                          checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
-                                          conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
-                                                           uiOutput("hyper_fit_specs_inputs")
+                         checkboxInput(inputId="ui_show_algorithm", label=h4("Algorithm"), value=TRUE),
+                         conditionalPanel(condition="input.ui_show_algorithm == true",
+                                          fluidRow(
+                                              column(6,
+                                                     selectInput(inputId="hyper_fit_algo_func",
+                                                                 label="Algorithm",
+                                                                 choices=list(
+                                                                     "optim"="optim",
+                                                                     "LA"="LA",
+                                                                     "LD"="LD"
+                                                                 ),
+                                                                 selected="optim")
+                                              ),
+                                              column(6,
+                                                     conditionalPanel(condition="input.hyper_fit_algo_func == 'optim'",
+                                                                      selectInput(inputId="hyper_fit_optim_method",
+                                                                                  label="Method",
+                                                                                  choices=names(algsTable$optim),
+                                                                                  selected="Nelder-Mead")
+                                                     ),
+                                                     conditionalPanel(condition="input.hyper_fit_algo_func == 'LA'",
+                                                                      selectInput(inputId="hyper_fit_LA_method",
+                                                                                  label="Method",
+                                                                                  choices=names(algsTable$LA),
+                                                                                  selected="NM")
+                                                     ),
+                                                     conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
+                                                                      selectInput(inputId="hyper_fit_LD_method",
+                                                                                  label="Method",
+                                                                                  choices=names(algsTable$LD),
+                                                                                  selected="CHARM")
+                                                     )
+                                              )
+                                          ),
+                                          uiOutput("hyper_fit_selected_method"),
+                                          br(),
+                                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
+                                                           checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
+                                                           conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
+                                                                            uiOutput("hyper_fit_specs_inputs")
+                                                           )
                                           )
                          ),
                          tags$hr(),
-                         h4("Plot Options"),
-                         fluidRow(
-                             column(6,
-                                    sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
-                             ),
-                             column(6,
-                                    sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0, max=1, value=1, step=0.05, ticks=FALSE)
-                             )
+                         checkboxInput(inputId="ui_show_plot_options", label=h4("Plot Options"), value=TRUE),
+                         conditionalPanel(condition="input.ui_show_plot_options == true",
+                                          fluidRow(
+                                              column(6,
+                                                     sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
+                                              ),
+                                              column(6,
+                                                     sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0, max=1, value=1, step=0.05, ticks=FALSE)
+                                              )
+                                          ),
+                                          checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),
+                                          tags$hr(),
+                                          h5("2D only"),
+                                          fluidRow(
+                                              column(6,
+                                                     checkboxInput(inputId="hyper_fit_use_bar", label="Use Bar", value=TRUE)
+                                              ),
+                                              column(6,
+                                                     conditionalPanel(condition="input.hyper_fit_use_bar == true",
+                                                                      selectInput(inputId="hyper_fit_bar_position",label="Bar Position",
+                                                                                  choices=list(
+                                                                                      "Top"="top",
+                                                                                      "Top Right"="topright",
+                                                                                      "Right"="right",
+                                                                                      "Bottom Right"="bottomright",
+                                                                                      "Bottom"="bottom",
+                                                                                      "Bottom Left"="bottomleft",
+                                                                                      "Left"="left",
+                                                                                      "Top Left"="topleft"
+                                                                                  ),
+                                                                                  selected="topright")
+                                                     )
+                                              )
+                                          )
                          ),
-                         checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),
                          tags$hr(),
-                         h5("2D only"),
-                         fluidRow(
-                             column(6,
-                                    selectInput(inputId="hyper_fit_position",label="Bar Position",
-                                                choices=list(
-                                                    "Top"="top",
-                                                    "Top Right"="topright",
-                                                    "Right"="right",
-                                                    "Bottom Right"="bottomright",
-                                                    "Bottom"="bottom",
-                                                    "Bottom Left"="bottomleft",
-                                                    "Left"="left",
-                                                    "Top Left"="topleft"
-                                                ),
-                                                selected="topright")
-                             ),
-                             column(6,
-                                    checkboxInput(inputId="hyper_fit_dobar", label="Bar", value=TRUE)
-                             )
+                         checkboxInput(inputId="ui_show_upload_data", label=h4("Upload Data"), value=TRUE),
+                         conditionalPanel(condition="input.ui_show_upload_data == true",
+                                          selectInput(inputId="file1_separator", label="File type", choices=list("csv"=",",
+                                                                                                                 "tsv"="\t",
+                                                                                                                 "ssv"=" "),
+                                                      selected=" "),
+                                          fileInput('upload_file1', 'Choose file to upload',
+                                                    accept = c(
+                                                        'text/csv',
+                                                        'text/comma-separated-values',
+                                                        'text/tab-separated-values',
+                                                        'text/plain',
+                                                        '.csv',
+                                                        '.tsv'
+                                                    )
+                                          ),
+                                          actionButton(inputId="plot_file1", label=span("Use"), icon("file-text"))      
                          ),
                          tags$hr(),
-                         h4("Upload Data"),
-                         selectInput(inputId="file1_separator", label="File type", choices=list("csv"=",",
-                                                                                                "tsv"="\t",
-                                                                                                "ssv"=" "),
-                                     selected=" "),
-                         fileInput('upload_file1', 'Choose file to upload',
-                                   accept = c(
-                                       'text/csv',
-                                       'text/comma-separated-values',
-                                       'text/tab-separated-values',
-                                       'text/plain',
-                                       '.csv',
-                                       '.tsv'
-                                   )
-                         ),
-                         actionButton(inputId="plot_file1", label=span("Use"), icon("file-text")),
-                         tags$hr(),
-                         h4("Example Data"),
-                         actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),
-                         actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("file-text")),
-                         actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
-                         ),
+                         checkboxInput(inputId="ui_show_example_data", label=h4("Example Data"), value=TRUE),
+                         conditionalPanel(condition="input.ui_show_example_data == true",
+                                          actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),
+                                          actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("file-text")),
+                                          actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
+                         )
+                    ),
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),

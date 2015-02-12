@@ -161,8 +161,8 @@ shinyServer(function(input, output, session) {
                  doellipse=input$hyper_fit_doellipse,
                  sigscale=c(0,input$hyper_fit_sigscale),
                  trans=input$hyper_fit_trans,
-                 dobar=input$hyper_fit_dobar,
-                 position=input$hyper_fit_position)
+                 dobar=input$hyper_fit_use_bar,
+                 position=input$hyper_fit_bar_position)
         }
     })
     
