@@ -51,15 +51,21 @@ shinyServer(function(input, output, session) {
         # get specs
         Specs <- list()
         spec_list <- isolate(getSpecs())
-        if(length(spec_list) > 0) {
+        if(length(spec_list) > 0 && isolate(input$hyper_fit_specs_checkbox)==T) {
             for(i in 1:length(spec_list)) {
+                
+                # get spec properties
                 spec_name <- spec_list[[i]]$spec
                 spec_id <- paste0("hyper_fit_spec_",spec_name)
                 spec_text <- isolate(input[[spec_id]])
-                if(is.null(spec_text) || nchar(spec_text)==0) {
+                
+                # if spec field is empty, use default value
+                if(nchar(spec_text)==0) {
                     spec_text <- spec_list[[i]]$default
                     updateTextInput(session, spec_id, value=spec_list[[i]]$default)
                 }
+                
+                # parse the input
                 tryCatch({
                     ev <- eval(parse(text=spec_text))
                     if(is.null(ev)) {
@@ -73,6 +79,9 @@ shinyServer(function(input, output, session) {
                     stop(paste0(spec_name, " has an invalid argument"))
                 })
             }
+        }
+        else {
+            Specs <- NULL
         }
         
         # check if example buttons were pressed
@@ -139,6 +148,7 @@ shinyServer(function(input, output, session) {
                               Specs=Specs))
         }
         
+        # if no data is being used, return NULL
         return (NULL)
     })
     
@@ -173,6 +183,8 @@ shinyServer(function(input, output, session) {
         }
     })
     
+    # Posterior1 plot height #
+    ##########################
     posterior1_plot_height <- function() {
         fit <- fit_result()
         if(!is.null(fit)) {
@@ -203,8 +215,8 @@ shinyServer(function(input, output, session) {
         return(algsTable[[alg]][[method]])
     })
     
-    # function to get the method's spec list #
-    ##########################################
+    # function to get current spec list #
+    #####################################
     getSpecs <- reactive ({
         return(getMethod()$Specs)
     })
@@ -212,7 +224,7 @@ shinyServer(function(input, output, session) {
     # Specs label field #
     #####################
     output$hyper_fit_specs_label <- renderText ({
-        if(input$hyper_fit_show_specs==TRUE) {
+        if(input$hyper_fit_specs_checkbox==TRUE) {
             "Specs ="
         }
         else {

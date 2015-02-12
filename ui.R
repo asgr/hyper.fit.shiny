@@ -49,8 +49,8 @@ shinyUI(fluidPage(
                          uiOutput("hyper_fit_selected_method"),
                          br(),
                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
-                                          checkboxInput(inputId="hyper_fit_show_specs", label=textOutput("hyper_fit_specs_label"), value=FALSE),
-                                          conditionalPanel(condition="input.hyper_fit_show_specs == true",
+                                          checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
+                                          conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
                                                            uiOutput("hyper_fit_specs_inputs")
                                           )
                          ),
