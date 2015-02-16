@@ -13,8 +13,25 @@ shinyUI(fluidPage(
                                     )
                              ),
                          tags$hr(),
-                         checkboxInput(inputId="ui_show_algorithm", label=h4("Algorithm"), value=TRUE),
-                         conditionalPanel(condition="input.ui_show_algorithm == true",
+                         checkboxInput(inputId="ui_show_fit_options", label=h4("Fit Options"), value=TRUE),
+                         conditionalPanel(condition="input.ui_show_fit_options == true",
+                                          fluidRow(
+                                              column(6,
+                                                     selectInput(inputId="hyper_fit_coord_type",
+                                                                 label="coord.type",
+                                                                 choices=list("normvec"="normvec",
+                                                                              "alpha"="alpha",
+                                                                              "theta"="theta"),
+                                                                 selected="alpha")
+                                              ),
+                                              column(6,
+                                                     selectInput(inputId="hyper_fit_scat_type",
+                                                                 label="scat.type",
+                                                                 choices=list("orth"="orth",
+                                                                              "vert.axis"="vert.axis"),
+                                                                 selected="vert.axis")
+                                              )
+                                          ),
                                           fluidRow(
                                               column(6,
                                                      selectInput(inputId="hyper_fit_algo_func",
@@ -49,6 +66,9 @@ shinyUI(fluidPage(
                                           ),
                                           uiOutput("hyper_fit_selected_method"),
                                           br(),
+                                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LA' || input.hyper_fit_algo_func == 'LD'",
+                                                           numericInput(inputId="hyper_fit_itermax", label="Max Iterations", value=1e4, min=0)
+                                          ),
                                           conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
                                                            checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
                                                            conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
@@ -64,7 +84,7 @@ shinyUI(fluidPage(
                                                      sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
                                               ),
                                               column(6,
-                                                     sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0, max=1, value=1, step=0.05, ticks=FALSE)
+                                                     sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0.01, max=1, value=1, step=0.01, ticks=FALSE)
                                               )
                                           ),
                                           checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),

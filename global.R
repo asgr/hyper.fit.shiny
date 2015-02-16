@@ -44,11 +44,11 @@ algsTable = list(
         "SANN"       = list("name" = "Belisle (1992)",
                             "link" = "",
                             "alg"  = "SANN",
-                            "Specs"= list()),
-        "Brent"      = list("name" = "info, one-dimensional",
-                            "link" = "",
-                            "alg"  = "Brent",
                             "Specs"= list())
+#         "Brent"      = list("name" = "info, one-dimensional",
+#                             "link" = "",
+#                             "alg"  = "Brent",
+#                             "Specs"= list())
     ),
     "LA" = list(
         "AGA"        = list("name" = "Adaptive Gradient Ascent",
@@ -59,10 +59,13 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "BFGS",
                             "Specs"= list()),
+        
+        #ERROR, X IS REQUIRED IN THE DATA
         "BHHH"       = list("name" = "Berndt et al.",
                             "link" = "",
                             "alg"  = "BHHH",
                             "Specs"= list()),
+        
         "CG"         = list("name" = "Conjugate Gradient",
                             "link" = "",
                             "alg"  = "CG",
@@ -75,10 +78,13 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "HAR",
                             "Specs"= list()),
+        
+        #ERROR, LaplaceApproximation stopped at iteration 1.
         "HJ"         = list("name" = "Hooke-Jeeves",
                             "link" = "",
                             "alg"  = "HJ",
                             "Specs"= list()),
+        
         "LBFGS"      = list("name" = "Limited-memory BFGS",
                             "link" = "",
                             "alg"  = "LBFGS",
@@ -103,10 +109,13 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "Rprop",
                             "Specs"= list()),
+        
+        # ERROR, SGD requires Data$file, which is missing.
         "SGD"        = list("name" = "Stochastic Gradient Descent",
                             "link" = "",
                             "alg"  = "SGD",
                             "Specs"= list()),
+        
         "SOMA"       = list("name" = "Self-Organizing Migration Algorithm",
                             "link" = "",
                             "alg"  = "SOMA",
@@ -145,7 +154,6 @@ algsTable = list(
                             "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.02, 3)"), # can accept vector
                                           "L"=list("spec"="L","default"="2"),
                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
-        
         "AM"         = list("name" = "Adaptive Metropolis",
                             "link" = "http://www.bayesian-inference.com/mcmcam",
                             "alg"  = "AM",
@@ -226,14 +234,11 @@ algsTable = list(
                             "link" = "http://www.bayesian-inference.com/mcmcim",
                             "alg"  = "IM",
                             "Specs"= list("mu"=list("spec"="mu","default"="rep(1, 3)"))), # vector of length Initial.Values
-        
-        # ERRORS
-        "INCA"       = list("name" = "Interchain Adaptation",
-                            "link" = "http://www.bayesian-inference.com/mcmcinca",
-                            "alg"  = "INCA",
-                            "Specs"= list("Adaptive"=list("spec"="Adaptive","default"="500"),
-                                          "Periodicity"=list("spec"="Periodicity","default"="10"))),
-        
+#         "INCA"       = list("name" = "Interchain Adaptation",
+#                             "link" = "http://www.bayesian-inference.com/mcmcinca",
+#                             "alg"  = "INCA",
+#                             "Specs"= list("Adaptive"=list("spec"="Adaptive","default"="500"),
+#                                           "Periodicity"=list("spec"="Periodicity","default"="10"))),
         "MALA"       = list("name" = "Metropolis-Adjusted Langevin Algorithm",
                             "link" = "http://www.bayesian-inference.com/mcmcmala",
                             "alg"  = "MALA",
@@ -312,74 +317,60 @@ algsTable = list(
                             "alg"  = "RSS",
                             "Specs"= list("m"=list("spec"="m","default"="5"),
                                           "w"=list("spec"="w","default"="1e-5"))),
-        
-        # WHAT IS DYN ??
-        "SAMWG"      = list("name" = "Sequential Adaptive Metropolis-within-Gibbs",
-                            "link" = "http://www.bayesian-inference.com/mcmcsamwg",
-                            "alg"  = "SAMWG",
-                            "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
-                                          "Periodicity"=list("spec"="Periodicity","default"="50"))),
-        
-        # WHAT IS DYN ??
-        "SMWG"       = list("name" = "Sequential Metropolis-within-Gibbs",
-                            "link" = "http://www.bayesian-inference.com/mcmcsmwg",
-                            "alg"  = "SMWG",
-                            "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"))),
-        
+#         "SAMWG"      = list("name" = "Sequential Adaptive Metropolis-within-Gibbs",
+#                             "link" = "http://www.bayesian-inference.com/mcmcsamwg",
+#                             "alg"  = "SAMWG",
+#                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
+#                                           "Periodicity"=list("spec"="Periodicity","default"="50"))),
+#         "SMWG"       = list("name" = "Sequential Metropolis-within-Gibbs",
+#                             "link" = "http://www.bayesian-inference.com/mcmcsmwg",
+#                             "alg"  = "SMWG",
+#                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"))),
         "Slice"      = list("name" = "Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcslice",
                             "alg"  = "Slice",
                             "Specs"= list("m"=list("spec"="m","default"="Inf"),
                                           "w"=list("spec"="w","default"="1"))),
-        
-        # HOW IS FILE USED??
-        "SGLD"       = list("name" = "Stochastic Gradient Langevin Dynamics",
-                            "link" = "http://www.bayesian-inference.com/mcmcsgld",
-                            "alg"  = "SGLD",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="1e-4"), # either scalar or vector
-                                          "file"=list("spec"="file","default"="X.csv"),
-                                          "Nr"=list("spec"="Nr","default"="1e4"),
-                                          "Nc"=list("spec"="Nc","default"="6"),
-                                          "size"=list("spec"="size","default"="10"))),
+#         "SGLD"       = list("name" = "Stochastic Gradient Langevin Dynamics",
+#                             "link" = "http://www.bayesian-inference.com/mcmcsgld",
+#                             "alg"  = "SGLD",
+#                             "Specs"= list("epsilon"=list("spec"="epsilon","default"="1e-4"),
+#                                           "file"=list("spec"="file","default"="X.csv"),
+#                                           "Nr"=list("spec"="Nr","default"="1e4"),
+#                                           "Nc"=list("spec"="Nc","default"="6"),
+#                                           "size"=list("spec"="size","default"="10"))),
         "THMC"       = list("name" = "Tempered Hamiltonian Monte Carlo",
                             "link" = "http://www.bayesian-inference.com/mcmcthmc",
                             "alg"  = "THMC",
-                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05, 3)"), # can accept vector
+                            "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05, 3)"),
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
-        
-        # ERRORS
-        "twalk"      = list("name" = "t-walk",
-                            "link" = "http://www.bayesian-inference.com/mcmctwalk",
-                            "alg"  = "twalk",
-                            "Specs"= list("SIV"=list("spec"="SIV","default"="NULL"),
-                                          "n1"=list("spec"="n1","default"="4"),
-                                          "at"=list("spec"="at","default"="6"),
-                                          "aw"=list("spec"="aw","default"="1.5"))),
-        
+#         "twalk"      = list("name" = "t-walk",
+#                             "link" = "http://www.bayesian-inference.com/mcmctwalk",
+#                             "alg"  = "twalk",
+#                             "Specs"= list("SIV"=list("spec"="SIV","default"="NULL"),
+#                                           "n1"=list("spec"="n1","default"="4"),
+#                                           "at"=list("spec"="at","default"="6"),
+#                                           "aw"=list("spec"="aw","default"="1.5"))),
         "UESS"       = list("name" = "Univariate Eigenvector Slice Sampler",
                             "link" = "http://www.bayesian-inference.com/mcmcuess",
                             "alg"  = "UESS",
                             "Specs"= list("A"=list("spec"="A","default"="Inf"),
                                           "B"=list("spec"="B","default"="NULL"),
                                           "m"=list("spec"="m","default"="100"),
-                                          "n"=list("spec"="n","default"="0"))),
-        
-        # WHAT IS DYN ??
-        "USAMWG"     = list("name" = "Updating Sequential Adaptive Metropolis-within-Gibbs",
-                            "link" = "http://www.bayesian-inference.com/mcmcusamwg",
-                            "alg"  = "USAMWG",
-                            "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
-                                          "Periodicity"=list("spec"="Periodicity","default"="50"),
-                                          "Fit"=list("spec"="Fit","default"="Fit"),
-                                          "Begin"=list("spec"="Begin","default"="T.m"))),
-        
-        # WHAT IS DYN ??
-        "USMWG"      = list("name" = "Updating Sequential Metropolis-within-Gibbs",
-                            "link" = "http://www.bayesian-inference.com/mcmcusmwg",
-                            "alg"  = "USMWG",
-                            "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
-                                          "Fit"=list("spec"="Fit","default"="Fit"),
-                                          "Begin"=list("spec"="Begin","default"="T.m")))
+                                          "n"=list("spec"="n","default"="0")))
+#         "USAMWG"     = list("name" = "Updating Sequential Adaptive Metropolis-within-Gibbs",
+#                             "link" = "http://www.bayesian-inference.com/mcmcusamwg",
+#                             "alg"  = "USAMWG",
+#                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
+#                                           "Periodicity"=list("spec"="Periodicity","default"="50"),
+#                                           "Fit"=list("spec"="Fit","default"="Fit"),
+#                                           "Begin"=list("spec"="Begin","default"="T.m"))),
+#         "USMWG"      = list("name" = "Updating Sequential Metropolis-within-Gibbs",
+#                             "link" = "http://www.bayesian-inference.com/mcmcusmwg",
+#                             "alg"  = "USMWG",
+#                             "Specs"= list("Dyn"=list("spec"="Dyn","default"="Dyn"),
+#                                           "Fit"=list("spec"="Fit","default"="Fit"),
+#                                           "Begin"=list("spec"="Begin","default"="T.m")))
         )
     )

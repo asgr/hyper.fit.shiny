@@ -84,10 +84,18 @@ shinyServer(function(input, output, session) {
             Specs <- NULL
         }
         
+        # get more options
+        itermax <- isolate(input$hyper_fit_itermax)
+        coord.type <- isolate(input$hyper_fit_coord_type)
+        scat.type <- isolate(input$hyper_fit_scat_type)
+        
         # check if example buttons were pressed
         if(actions$last == 'example_plot_TFR') {
             return (hyper.fit(X=TFR[,c("logv", "M_K")],
                               vars=TFR[,c("logv_err", "M_K_err")]^2,
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
                               Specs=Specs))
@@ -95,6 +103,9 @@ shinyServer(function(input, output, session) {
         else if(actions$last == 'example_plot_MJB') {
             return (hyper.fit(X=MJB[,c("logM", "logj", "B.T")],
                               covarray=makecovarray3d(MJB$logM_err, MJB$logj_err, MJB$B.T_err, MJB$corMJ, 0, 0),
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
                               Specs=Specs))
@@ -103,6 +114,9 @@ shinyServer(function(input, output, session) {
             return (hyper.fit(X=GAMAsmVsize[,c("logmstar", "logrekpc")],
                               vars=GAMAsmVsize[,c("logmstar_err", "logrekpc_err")]^2,
                               weights=GAMAsmVsize[,"weights"],
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
                               Specs=Specs))
@@ -142,7 +156,13 @@ shinyServer(function(input, output, session) {
                 colnames(X) <- c("x", "y")
             }
             
-            return (hyper.fit(X=X, covarray=covarray,
+            # check for weights
+            weights <- if(is.null(df$weights)) 1 else df$weights
+            
+            return (hyper.fit(X=X, covarray=covarray, weights=weights,
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
                               Specs=Specs))
