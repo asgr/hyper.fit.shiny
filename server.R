@@ -88,6 +88,7 @@ shinyServer(function(input, output, session) {
         itermax <- isolate(input$hyper_fit_itermax)
         coord.type <- isolate(input$hyper_fit_coord_type)
         scat.type <- isolate(input$hyper_fit_scat_type)
+        doerrorscale <- isolate(input$hyper_fit_doerrorscale)
         
         # check if example buttons were pressed
         if(actions$last == 'example_plot_TFR') {
@@ -98,7 +99,8 @@ shinyServer(function(input, output, session) {
                               scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
-                              Specs=Specs))
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
         }
         else if(actions$last == 'example_plot_MJB') {
             return (hyper.fit(X=MJB[,c("logM", "logj", "B.T")],
@@ -108,7 +110,8 @@ shinyServer(function(input, output, session) {
                               scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
-                              Specs=Specs))
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
         }
         else if(actions$last == 'example_plot_GAMAsmVsize') {
             return (hyper.fit(X=GAMAsmVsize[,c("logmstar", "logrekpc")],
@@ -119,7 +122,8 @@ shinyServer(function(input, output, session) {
                               scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
-                              Specs=Specs))
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
         }
         else if(actions$last == 'plot_file1') {
             
@@ -165,7 +169,8 @@ shinyServer(function(input, output, session) {
                               scat.type=scat.type,
                               algo.func=algo.func,
                               algo.method=algo.method,
-                              Specs=Specs))
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
         }
         
         # if no data is being used, return NULL
