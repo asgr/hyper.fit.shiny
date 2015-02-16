@@ -34,6 +34,16 @@ shinyUI(fluidPage(
                                           ),
                                           fluidRow(
                                               column(6,
+                                                     checkboxInput(inputId="hyper_fit_doerrorscale", label="doerrorscale", value=FALSE)
+                                              ),
+                                              column(6,
+                                                     conditionalPanel(condition="input.hyper_fit_algo_func == 'LA' || input.hyper_fit_algo_func == 'LD'",
+                                                                      numericInput(inputId="hyper_fit_itermax", label="Max Iterations", value=1e4, min=0)
+                                                     )
+                                              )
+                                          ),
+                                          fluidRow(
+                                              column(6,
                                                      selectInput(inputId="hyper_fit_algo_func",
                                                                  label="Algorithm",
                                                                  choices=list(
@@ -66,9 +76,6 @@ shinyUI(fluidPage(
                                           ),
                                           uiOutput("hyper_fit_selected_method"),
                                           br(),
-                                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LA' || input.hyper_fit_algo_func == 'LD'",
-                                                           numericInput(inputId="hyper_fit_itermax", label="Max Iterations", value=1e4, min=0)
-                                          ),
                                           conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
                                                            checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
                                                            conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
