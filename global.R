@@ -47,13 +47,10 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "BFGS",
                             "Specs"= list()),
-        
-        #ERROR, X IS REQUIRED IN THE DATA
-        "BHHH"       = list("name" = "Berndt et al.",
-                            "link" = "",
-                            "alg"  = "BHHH",
-                            "Specs"= list()),
-        
+#         "BHHH"       = list("name" = "Berndt et al.",
+#                             "link" = "",
+#                             "alg"  = "BHHH",
+#                             "Specs"= list()),
         "CG"         = list("name" = "Conjugate Gradient",
                             "link" = "",
                             "alg"  = "CG",
@@ -66,13 +63,11 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "HAR",
                             "Specs"= list()),
-        
-        #ERROR, LaplaceApproximation stopped at iteration 1.
-        "HJ"         = list("name" = "Hooke-Jeeves",
-                            "link" = "",
-                            "alg"  = "HJ",
-                            "Specs"= list()),
-        
+        # might work
+#         "HJ"         = list("name" = "Hooke-Jeeves",
+#                             "link" = "",
+#                             "alg"  = "HJ",
+#                             "Specs"= list()),
         "LBFGS"      = list("name" = "Limited-memory BFGS",
                             "link" = "",
                             "alg"  = "LBFGS",
@@ -97,13 +92,10 @@ algsTable = list(
                             "link" = "",
                             "alg"  = "Rprop",
                             "Specs"= list()),
-        
-        # ERROR, SGD requires Data$file, which is missing.
-        "SGD"        = list("name" = "Stochastic Gradient Descent",
-                            "link" = "",
-                            "alg"  = "SGD",
-                            "Specs"= list()),
-        
+#         "SGD"        = list("name" = "Stochastic Gradient Descent",
+#                             "link" = "",
+#                             "alg"  = "SGD",
+#                             "Specs"= list()),
         "SOMA"       = list("name" = "Self-Organizing Migration Algorithm",
                             "link" = "",
                             "alg"  = "SOMA",
@@ -222,6 +214,7 @@ algsTable = list(
                             "link" = "http://www.bayesian-inference.com/mcmcim",
                             "alg"  = "IM",
                             "Specs"= list("mu"=list("spec"="mu","default"="rep(1, 3)"))), # vector of length Initial.Values
+                # might work
 #         "INCA"       = list("name" = "Interchain Adaptation",
 #                             "link" = "http://www.bayesian-inference.com/mcmcinca",
 #                             "alg"  = "INCA",
@@ -333,6 +326,7 @@ algsTable = list(
                             "Specs"= list("epsilon"=list("spec"="epsilon","default"="rep(0.05, 3)"),
                                           "L"=list("spec"="L","default"="2"),
                                           "Temperature"=list("spec"="Temperature","default"="2"))),
+        # might work
 #         "twalk"      = list("name" = "t-walk",
 #                             "link" = "http://www.bayesian-inference.com/mcmctwalk",
 #                             "alg"  = "twalk",
