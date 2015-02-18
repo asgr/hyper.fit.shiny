@@ -315,7 +315,7 @@ shinyServer(function(input, output, session) {
         acros <- sapply(algsTable$optim, function(alg) { alg[["alg"]] })
         names <- sapply(algsTable$optim, function(alg) { alg[["name"]] })
         links <- sapply(algsTable$optim, function(alg) { alg[["link"]] })
-        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        name_links <- paste0("<a href='",links,"' target='_blank'>",names,"</a>")
         
         # display data frame
         df <- data.frame(acros, name_links)
@@ -331,7 +331,7 @@ shinyServer(function(input, output, session) {
         acros <- sapply(algsTable$LA, function(alg) { alg[["alg"]] })
         names <- sapply(algsTable$LA, function(alg) { alg[["name"]] })
         links <- sapply(algsTable$LA, function(alg) { alg[["link"]] })
-        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        name_links <- paste0("<a href='",links,"' target='_blank'>",names,"</a>")
         
         # display data frame
         df <- data.frame(acros, name_links)
@@ -347,7 +347,7 @@ shinyServer(function(input, output, session) {
         acros <- sapply(algsTable$LD, function(alg) { alg[["alg"]] })
         names <- sapply(algsTable$LD, function(alg) { alg[["name"]] })
         links <- sapply(algsTable$LD, function(alg) { alg[["link"]] })
-        name_links <- paste0("<a href='",links,"'>",names,"</a>")
+        name_links <- paste0("<a href='",links,"' target='_blank'>",names,"</a>")
         
         # display data frame
         df <- data.frame(acros, name_links)
