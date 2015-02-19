@@ -163,6 +163,7 @@ shinyServer(function(input, output, session) {
             # check for weights
             weights <- if(is.null(df$weights)) 1 else df$weights
             
+            # return data
             return (hyper.fit(X=X, covarray=covarray, weights=weights,
                               itermax=itermax,
                               coord.type=coord.type,

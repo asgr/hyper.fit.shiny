@@ -168,9 +168,128 @@ shinyUI(fluidPage(
         ),
         tabPanel("Info",
                  h3("About"),
-                 p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c"),
-                   "This website is written in the programming language", strong("R"), "and uses the library", strong("Shiny"), "to provide
-                   the interface."),
+                 p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c")),
+                 p(
+                     "This website was written in the programming language", strong("R"), "by", strong("Joseph Dunne"), "and", strong("Aarom Robotham."),
+                     "It uses the library", strong("Shiny"), "to provide the interface."
+                   ),
+                 br(),
+                 h3("Usage"),
+                 p(
+                     "To use this website, data must first be specified.",
+                     "Either example data (see", span("Example Data", style="text-decoration:underline;"), ")",
+                     "or custom data (see", span("Uploading Data", style="text-decoration:underline;"), ") can be used.",
+                     "Once the data has been specified, the fitting line/plane can be calculated and plotted.",
+                     "To change the calculation method, see", span("Changing the Fit method.", style="text-decoration:underline;"),
+                     "To change the appearance of the plot, see", span("Changing the Plot style.", style="text-decoration:underline;")
+                 ),
+                 p(strong("Example Data", style="text-decoration:underline;")),
+                 p(
+                     "Example data can be used by selecting an example under", strong("Example Data."),
+                     "Once an example is clicked, the example data will be used in all future calculations."
+                 ),
+                 p(strong("Uploading Data", style="text-decoration:underline;")),
+                 p(
+                     "Data may be uploaded under the", strong("Upload Data"), "section.",
+                     "Before uploading a file, the file type should be specified using the",span("File Type", style="text-decoration:underline;"), "menu.",
+                     "The menu entries include: CSV = comma-separated value, TSV = tab-separated values, SSV = space-separated values.",
+                     "The uploaded data may either be 2D or 3D data, and following rules apply for the two cases:"
+                 ),
+                 fluidRow(
+                     column(3,
+                            p(
+                                span("Required,", style='color:blue;'),
+                                span("Ignore,", style='color:red;'),
+                                span("Optional.", style='color:green;')
+                            ),
+                            HTML(
+                                "<table class='table table-condensed'><tbody>
+                                <tr>
+                                <th>2D</th>
+                                <th>3D</th>
+                                </tr>
+                                <tr>
+                                <td style='color:blue;'>x</th>
+                                <td style='color:blue;'>x</th>
+                                </tr>
+                                <tr>
+                                <td style='color:blue;'>y</th>
+                                <td style='color:blue;'>y</th>
+                                </tr>
+                                <tr>
+                                <td style='color:red;'>z</th>
+                                <td style='color:blue;'>z</th>
+                                </tr>
+                                <tr>
+                                <td style='color:green;'>sx</th>
+                                <td style='color:green;'>sx</th>
+                                </tr>
+                                <tr>
+                                <td style='color:green;'>sy</th>
+                                <td style='color:green;'>sy</th>
+                                </tr>
+                                <tr>
+                                <td style='color:red;'>sz</th>
+                                <td style='color:green;'>sz</th>
+                                </tr>
+                                <tr>
+                                <td style='color:green;'>corxy</th>
+                                <td style='color:green;'>corxy</th>
+                                </tr>
+                                <tr>
+                                <td style='color:red;'>corxz</th>
+                                <td style='color:green;'>corxz</th>
+                                </tr>
+                                <tr>
+                                <td style='color:red;'>coryz</th>
+                                <td style='color:green;'>coryz</th>
+                                </tr>
+                                <tr>
+                                <td style='color:green;'>weights</th>
+                                <td style='color:green;'>weights</th>
+                                </tr>
+                                </tbody></table>")
+                            ),
+                     column(4,
+                            p("Example of 2D data (SSV)", style="text-decoration:underline;"),
+                            HTML('<pre>
+"x" "y" "sx" "sy" "corxy" "weights"
+0.2695 0.0724 0.065 0.03 0.85 1.0
+0.1615 0.0147 0.065 0.03 0.85 1.0
+-0.0865 -0.151 0.065 0.03 0.85 1.0
+0.8808 0.5284 0.065 0.03 0.85 1.5
+-0.8177 -0.9546 0.065 0.03 0.85 1.5
+0.4069 0.0901 0.065 0.03 0.85 1.0
+0.4118 0.242 0.065 0.03 0.85 1.0
+0.4425 -0.0621 0.065 0.03 0.85 1.0
+</pre>')
+                            ),
+                     column(5,
+                            p("Example of 3D data (CSV)", style="text-decoration:underline;"),
+                            HTML('<pre>
+"x","y","z","sx","sy","sz","corxy","corxz","coryz",
+0.2695,0.0724,0.0394,0.065,0.03,0.02,0.85,0,0,
+0.1615,0.0147,0.0529,0.065,0.03,0.02,0.85,0,0,
+-0.0865,-0.151,0.0224,0.065,0.03,0.02,0.85,0,0,
+0.8808,0.5284,0.1042,0.065,0.03,0.02,0.85,0,0,
+-0.8177,-0.9546,0,0.065,0.03,0.02,0.85,0,0,
+0.4069,0.0901,0.0191,0.065,0.03,0.02,0.85,0,0,
+0.4118,0.242,0.0292,0.065,0.03,0.02,0.85,0,0,
+0.4425,-0.0621,0.1424,0.065,0.03,0.02,0.85,0,0,
+</pre>')
+                     )
+                     ),
+                 p(
+                     "Once the data is uploaded, it can be used in all future calculations by pressing the", actionButton(inputId="dud", label=span("Use"), icon("file-text"))   ,"button."
+                     ),
+                 p(strong("Changing the Fit method", style="text-decoration:underline;")),
+                 p(
+                     "The method used to calculate the fit can be changed under", strong("Fit Options.")
+                     ),
+                 p(strong("Changing the Plot style", style="text-decoration:underline;")),
+                 p(
+                     "The appearance of the plot can be changed under", strong("Plot Options.")
+                 ),
                  br(),br(),br()
         )
     ),
