@@ -1,8 +1,34 @@
 shinyUI(fluidPage(
-    titlePanel(title="hyper.fit"),
+    
+    tags$head(
+        tags$title("hyper.fit"),
+        tags$link(rel="shortcut icon", href="favicon.ico"),
+        tags$style(HTML("
+                        .dataTables_info {display:none;}
+                        .dataTables_wrapper .row-fluid {display:none;}
+                        "))
+    ),
+    
+    # title #
+    #########
+    
+    fluidRow(
+        h1("hyper.fit", style="vertical-align:middle;color:white;margin:30px;"),
+        style = "margin-bottom:10px;background: #000 url('space.gif') repeat 0 0;"
+    ),
+    
+    # Main Content #
+    ################
+    
     tabsetPanel(
+        
+        # Plot Tab #
+        ############
         tabPanel("Plot",
                  sidebarLayout(
+                     
+                     # Side Panel #
+                     ##############
                      sidebarPanel(
                          fluidRow(
                              column(6,
@@ -146,26 +172,36 @@ shinyUI(fluidPage(
                                           actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
                          )
                     ),
+                    
+                    # Main Panel (outputs) #
+                    ########################
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
                          plotOutput("hyper_fit_plotPosterior", height="auto"),
                          uiOutput("hyper_fit_summary")
                      )
-                 ),
-                 br(),br(),br()
+                 )
         ),
+        
+        # Methods Tab #
+        ###############
         tabPanel("Methods",
                  h3("Methods"),
                  p("Below are the available methods for optim, LA and LD."),
+                 br(),
                  h4("Optim :"),
                  dataTableOutput("methods_optim_algs"),
+                 br(),
                  h4("LaplaceApproximation (LA) :"),
                  dataTableOutput("methods_LA_algs"),
-                 h4("LaplaceApproximation (LD) :"),
-                 dataTableOutput("methods_LD_algs"),
-                 br(),br(),br()
+                 br(),
+                 h4("LaplacesDemon (LD) :"),
+                 dataTableOutput("methods_LD_algs")
         ),
+        
+        # Info Tab #
+        ############
         tabPanel("Info",
                  h3("About"),
                  p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c")),
@@ -289,9 +325,13 @@ shinyUI(fluidPage(
                  p(strong("Changing the Plot style", style="text-decoration:underline;")),
                  p(
                      "The appearance of the plot can be changed under", strong("Plot Options.")
-                 ),
-                 br(),br(),br()
+                 )
         )
+    ),
+    br(),
+    div(
+        span(a("ICRAR", href="http://www.icrar.org/", target="_blank"), "2015, written by Joseph Dunne, Aaron Robotham", style="color:grey;font-size:12px;"),
+        style="text-align:center;margin-bottom:3px;"
     ),
     uiOutput("css_output_plots")
 ))
