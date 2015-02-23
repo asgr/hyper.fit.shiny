@@ -224,16 +224,16 @@ shinyUI(fluidPage(
                                                             '.tsv'
                                                         )
                                               ),
-                                              actionButton(inputId="plot_file1", label=span("Use"), icon("file-text"))      
+                                              actionButton(inputId="use_file1", label=span("Use"), icon("file-text"))      
                              )
                          ),
                          div(class="ui_region well",
                              checkboxInput(inputId="ui_show_example_data", label=h4("Example Data"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_example_data == true",
                                               br(),
-                                              actionButton(inputId="example_plot_TFR", label=span("TFR"), icon("file-text")),
-                                              actionButton(inputId="example_plot_MJB", label=span("MJB"), icon("file-text")),
-                                              actionButton(inputId="example_plot_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
+                                              actionButton(inputId="example_TFR", label=span("TFR"), icon("file-text")),
+                                              actionButton(inputId="example_MJB", label=span("MJB"), icon("file-text")),
+                                              actionButton(inputId="example_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
                              )
                          )
                      ),

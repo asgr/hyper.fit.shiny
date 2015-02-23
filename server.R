@@ -2,39 +2,31 @@ shinyServer(function(input, output, session) {
     
     # Data Selection Listeners #
     ############################
-    actions <- reactiveValues(last = "none")
+    rvs <- reactiveValues(currentData = "none")
     observe({
-        if (input$plot_file1 != 0)
-            actions$last <- 'plot_file1'
+        if (input$use_file1 != 0) {
+            if(!is.null(isolate(input$upload_file1))) {
+                rvs$currentData <- c(isolate(input$upload_file1$name), isolate(input$upload_file1$datapath))
+            }
+        }
     })
     observe({
-        if (input$example_plot_TFR != 0)
-            actions$last <- 'example_plot_TFR'
+        if (input$example_TFR != 0)
+            rvs$currentData <- 'TFR'
     })
     observe({
-        if (input$example_plot_MJB != 0)
-            actions$last <- 'example_plot_MJB'
+        if (input$example_MJB != 0)
+            rvs$currentData <- 'MJB'
     })
     observe({
-        if (input$example_plot_GAMAsmVsize != 0)
-            actions$last <- 'example_plot_GAMAsmVsize'
+        if (input$example_GAMAsmVsize != 0)
+            rvs$currentData <- 'GAMAsmVsize'
     })
     
     # Selected Data UI #
     ####################
     output$hyper_fit_data_used <- renderUI ({
-        if(actions$last=="plot_file1") {
-            HTML("<span style='color:#888888;'>Using ", input$upload_file1$name, "</span>")
-        }
-        else if(actions$last=="example_plot_TFR") {
-            HTML("<span style='color:#888888;'>Using TFR</span>")
-        }
-        else if(actions$last=="example_plot_MJB") {
-            HTML("<span style='color:#888888;'>Using MJB</span>")
-        }
-        else if(actions$last=="example_plot_GAMAsmVsize") {
-            HTML("<span style='color:#888888;'>Using GAMAsmVsize</span>")
-        }
+        HTML("<span style='color:#888888;'>Using ", rvs$currentData[1], "</span>")
     })
     
     # hyper.fit calculation #
@@ -91,7 +83,7 @@ shinyServer(function(input, output, session) {
         doerrorscale <- isolate(input$hyper_fit_doerrorscale)
         
         # check if example buttons were pressed
-        if(actions$last == 'example_plot_TFR') {
+        if(rvs$currentData[1] == 'TFR') {
             return (hyper.fit(X=TFR[,c("logv", "M_K")],
                               vars=TFR[,c("logv_err", "M_K_err")]^2,
                               itermax=itermax,
@@ -102,7 +94,7 @@ shinyServer(function(input, output, session) {
                               Specs=Specs,
                               doerrorscale=doerrorscale))
         }
-        else if(actions$last == 'example_plot_MJB') {
+        else if(rvs$currentData[1] == 'MJB') {
             return (hyper.fit(X=MJB[,c("logM", "logj", "B.T")],
                               covarray=makecovarray3d(MJB$logM_err, MJB$logj_err, MJB$B.T_err, MJB$corMJ, 0, 0),
                               itermax=itermax,
@@ -113,7 +105,7 @@ shinyServer(function(input, output, session) {
                               Specs=Specs,
                               doerrorscale=doerrorscale))
         }
-        else if(actions$last == 'example_plot_GAMAsmVsize') {
+        else if(rvs$currentData[1] == 'GAMAsmVsize') {
             return (hyper.fit(X=GAMAsmVsize[,c("logmstar", "logrekpc")],
                               vars=GAMAsmVsize[,c("logmstar_err", "logrekpc_err")]^2,
                               weights=GAMAsmVsize[,"weights"],
@@ -125,17 +117,13 @@ shinyServer(function(input, output, session) {
                               Specs=Specs,
                               doerrorscale=doerrorscale))
         }
-        else if(actions$last == 'plot_file1') {
+        else if(rvs$currentData[1] != "none") {
             
             # get inputs
-            inFile <- input$upload_file1
             sep <- isolate(input$file1_separator)
-            if (is.null(inFile)) {
-                return(NULL)
-            }
             
             # read in data from file
-            df <- read.table(inFile$datapath, header=TRUE, sep=sep, dec=".")
+            df <- read.table(rvs$currentData[2], header=TRUE, sep=sep, dec=".")
             if(!is.null(df$x) && !is.null(df$y) && !is.null(df$z)) {ndims <- 3}
             else if(!is.null(df$x) && !is.null(df$y)) {ndims <- 2}
             else {stop("Input file needs x and y dimensions.")}
