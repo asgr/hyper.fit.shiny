@@ -22,6 +22,14 @@ shinyServer(function(input, output, session) {
         if (input$example_GAMAsmVsize != 0)
             rvs$currentData <- 'GAMAsmVsize'
     })
+    observe({
+        if (input$example_hogg != 0)
+            rvs$currentData <- 'hogg'
+    })
+    observe({
+        if (input$example_FP6dFGS != 0)
+            rvs$currentData <- 'FP6dFGS'
+    })
     
     # Selected Data UI #
     ####################
@@ -83,7 +91,18 @@ shinyServer(function(input, output, session) {
         doerrorscale <- isolate(input$hyper_fit_doerrorscale)
         
         # check if example buttons were pressed
-        if(rvs$currentData[1] == 'TFR') {
+        if(rvs$currentData[1] == 'hogg') {
+            return (hyper.fit(X=hogg[-3,c("x", "y")],
+                              covarray=makecovarray2d(hogg[-3,"x_err"], hogg[-3,"y_err"], hogg[-3,"corxy"]),
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
+        }
+        else if(rvs$currentData[1] == 'TFR') {
             return (hyper.fit(X=TFR[,c("logv", "M_K")],
                               vars=TFR[,c("logv_err", "M_K_err")]^2,
                               itermax=itermax,
@@ -109,6 +128,18 @@ shinyServer(function(input, output, session) {
             return (hyper.fit(X=GAMAsmVsize[,c("logmstar", "logrekpc")],
                               vars=GAMAsmVsize[,c("logmstar_err", "logrekpc_err")]^2,
                               weights=GAMAsmVsize[,"weights"],
+                              itermax=itermax,
+                              coord.type=coord.type,
+                              scat.type=scat.type,
+                              algo.func=algo.func,
+                              algo.method=algo.method,
+                              Specs=Specs,
+                              doerrorscale=doerrorscale))
+        }
+        else if(rvs$currentData[1] == 'FP6dFGS') {
+            return (hyper.fit(X=FP6dFGS[,c("logIe_J", "logsigma", "logRe_J")],
+                              vars=FP6dFGS[,c("logIe_J_err", "logsigma_err", "logRe_J_err")]^2,
+                              weights=FP6dFGS[,"weights"],
                               itermax=itermax,
                               coord.type=coord.type,
                               scat.type=scat.type,

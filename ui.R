@@ -10,6 +10,7 @@ shinyUI(fluidPage(
                             min-height: 20px;
                             padding: 10px;
                             background-color: #f1f1f1;
+                            margin-bottom:10px;
                         }
                         .ui_region h4 {
                             margin:0px;
@@ -231,9 +232,11 @@ shinyUI(fluidPage(
                              checkboxInput(inputId="ui_show_example_data", label=h4("Example Data"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_example_data == true",
                                               br(),
+                                              actionButton(inputId="example_hogg", label=span("hogg"), icon("file-text")),
+                                              actionButton(inputId="example_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text")),
                                               actionButton(inputId="example_TFR", label=span("TFR"), icon("file-text")),
-                                              actionButton(inputId="example_MJB", label=span("MJB"), icon("file-text")),
-                                              actionButton(inputId="example_GAMAsmVsize", label=span("GAMAsmVsize"), icon("file-text"))
+                                              actionButton(inputId="example_FP6dFGS", label=span("FP6dFGS"), icon("file-text")),
+                                              actionButton(inputId="example_MJB", label=span("MJB"), icon("file-text"))
                              )
                          )
                      ),

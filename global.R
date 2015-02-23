@@ -7,6 +7,8 @@ library("mcmcplots")
 library("LaplacesDemon")
 library("hyper.fit")
 
+data(hogg)
+data(FP6dFGS)
 data(TFR)
 data(MJB)
 data(GAMAsmVsize)
