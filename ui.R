@@ -9,15 +9,7 @@ shinyUI(fluidPage(
                         .ui_region {
                             min-height: 20px;
                             padding: 10px;
-                            margin-bottom: 20px;
                             background-color: #f1f1f1;
-                            border: 1px solid #e3e3e3;
-                            -webkit-border-radius: 4px;
-                            -moz-border-radius: 4px;
-                            border-radius: 4px;
-                            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-                            -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-                            box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
                         }
                         .ui_region h4 {
                             margin:0px;
@@ -54,7 +46,7 @@ shinyUI(fluidPage(
                             padding:10px;
                             background-color:#FAFAFA;
                         }
-                        #ui_header1 {
+                        #ui_header_row h1 {
                             vertical-align:middle;
                             color:white;
                             margin:30px;
@@ -77,7 +69,7 @@ shinyUI(fluidPage(
     #########
     
     fluidRow(id="ui_header_row",
-        h1("hyper.fit", id="ui_header1")
+        h1("hyper.fit")
     ),
     
     # Main Content #
@@ -103,7 +95,7 @@ shinyUI(fluidPage(
                                   )
                          ),
                          tags$hr(),
-                         div(class="ui_region",
+                         div(class="ui_region well",
                              checkboxInput(inputId="ui_show_fit_options", label=h4("Fit Options"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_fit_options == true",
                                               br(),
@@ -176,7 +168,7 @@ shinyUI(fluidPage(
                                               )
                              )
                          ),
-                         div(class="ui_region",
+                         div(class="ui_region well",
                              checkboxInput(inputId="ui_show_plot_options", label=h4("Plot Options"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_plot_options == true",
                                               br(),
@@ -214,7 +206,7 @@ shinyUI(fluidPage(
                                               )
                              )
                          ),
-                         div(class="ui_region",
+                         div(class="ui_region well",
                              checkboxInput(inputId="ui_show_upload_data", label=h4("Upload Data"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_upload_data == true",
                                               br(),
@@ -235,7 +227,7 @@ shinyUI(fluidPage(
                                               actionButton(inputId="plot_file1", label=span("Use"), icon("file-text"))      
                              )
                          ),
-                         div(class="ui_region",
+                         div(class="ui_region well",
                              checkboxInput(inputId="ui_show_example_data", label=h4("Example Data"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_example_data == true",
                                               br(),
