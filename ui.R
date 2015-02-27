@@ -274,6 +274,9 @@ shinyUI(fluidPage(
                  h3("About"),
                  p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c")),
                  p(
+                     "hyper.fit is a package used to ....."
+                     ),
+                 p(
                      "This website was written in the programming language", strong("R"), "by", strong("Joseph Dunne"), "and", strong("Aarom Robotham."),
                      "It uses the library", strong("Shiny"), "to provide the interface."
                    ),
