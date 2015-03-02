@@ -244,7 +244,7 @@ shinyServer(function(input, output, session) {
         if(!is.null(out) && out$args$algo.func=="LD") {
             plot(as.mcmc(out$fit$Posterior1))
         }
-    }, height=posterior1_plot_height) # FIX THIS
+    }, height=posterior1_plot_height)
     
     # function to get the current method #
     ######################################
