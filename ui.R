@@ -97,33 +97,33 @@ shinyUI(fluidPage(
                          ),
                          tags$hr(),
                          div(class="ui_region well",
-                             checkboxInput(inputId="ui_show_fit_options", label=h4("Fit Options"), value=TRUE),
+                             checkboxInput(inputId="ui_show_fit_options", label=uiOutput("ui_fit_options_header"), value=FALSE),
                              conditionalPanel(condition="input.ui_show_fit_options == true",
                                               br(),
                                               fluidRow(
                                                   column(6,
                                                          selectInput(inputId="hyper_fit_coord_type",
-                                                                     label="coord.type",
-                                                                     choices=list("normvec"="normvec",
+                                                                     label="Coordinate Type",
+                                                                     choices=list("normal vector"="normvec",
                                                                                   "alpha"="alpha",
                                                                                   "theta"="theta"),
                                                                      selected="alpha")
                                                   ),
                                                   column(6,
                                                          selectInput(inputId="hyper_fit_scat_type",
-                                                                     label="scat.type",
-                                                                     choices=list("orth"="orth",
+                                                                     label="Scatter Type",
+                                                                     choices=list("orthogonal"="orth",
                                                                                   "vert.axis"="vert.axis"),
                                                                      selected="vert.axis")
                                                   )
                                               ),
                                               fluidRow(
                                                   column(6,
-                                                         checkboxInput(inputId="hyper_fit_doerrorscale", label="doerrorscale", value=FALSE)
+                                                         checkboxInput(inputId="hyper_fit_doerrorscale", label="Error Scale", value=FALSE)
                                                   ),
                                                   column(6,
                                                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LA' || input.hyper_fit_algo_func == 'LD'",
-                                                                          numericInput(inputId="hyper_fit_itermax", label="itermax", value=1e4, min=0)
+                                                                          numericInput(inputId="hyper_fit_itermax", label="Max Iterations", value=1e4, min=0)
                                                          )
                                                   )
                                               ),
@@ -170,22 +170,22 @@ shinyUI(fluidPage(
                              )
                          ),
                          div(class="ui_region well",
-                             checkboxInput(inputId="ui_show_plot_options", label=h4("Plot Options"), value=TRUE),
+                             checkboxInput(inputId="ui_show_plot_options", label=uiOutput("ui_plot_options_header"), value=FALSE),
                              conditionalPanel(condition="input.ui_show_plot_options == true",
                                               br(),
                                               fluidRow(
                                                   column(6,
-                                                         sliderInput(inputId="hyper_fit_sigscale", span("SigScale", style="color:#3B68B2;"), min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
+                                                         sliderInput(inputId="hyper_fit_sigscale", label="Sigma Scale", min=0.1, max=10, value=4, step=0.1, ticks=FALSE)
                                                   ),
                                                   column(6,
-                                                         sliderInput(inputId="hyper_fit_trans", span("Transparency", style="color:#3B68B2;"), min=0.01, max=1, value=1, step=0.01, ticks=FALSE)
+                                                         sliderInput(inputId="hyper_fit_trans", label="Transparency", min=0.01, max=1, value=1, step=0.01, ticks=FALSE)
                                                   )
                                               ),
                                               checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),
                                               tags$hr(),
-                                              h5("2D only"),
                                               fluidRow(
                                                   column(6,
+                                                         h5("2D only"),
                                                          checkboxInput(inputId="hyper_fit_use_bar", label="Use Bar", value=TRUE)
                                                   ),
                                                   column(6,
@@ -201,14 +201,14 @@ shinyUI(fluidPage(
                                                                                           "Left"="left",
                                                                                           "Top Left"="topleft"
                                                                                       ),
-                                                                                      selected="topright")
+                                                                                      selected="topleft")
                                                          )
                                                   )
                                               )
                              )
                          ),
                          div(class="ui_region well",
-                             checkboxInput(inputId="ui_show_upload_data", label=h4("Upload Data"), value=TRUE),
+                             checkboxInput(inputId="ui_show_upload_data", label=uiOutput("ui_upload_data_header"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_upload_data == true",
                                               br(),
                                               fileInput('upload_file1', 'Choose file to upload',
@@ -221,11 +221,13 @@ shinyUI(fluidPage(
                                                             '.tsv'
                                                         )
                                               ),
-                                              actionButton(inputId="use_file1", label=span("Use"), icon("file-text"))      
+                                              strong("PUT VARIABLE NAMES HERE"),
+                                              actionButton(inputId="use_file1", label=span("Use"), icon("file-text")),
+                                              actionButton(inputId="use_example", label=span("Show Example")) 
                              )
                          ),
                          div(class="ui_region well",
-                             checkboxInput(inputId="ui_show_example_data", label=h4("Example Data"), value=TRUE),
+                             checkboxInput(inputId="ui_show_example_data", label=uiOutput("ui_example_data_header"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_example_data == true",
                                               br(),
                                               actionButton(inputId="example_hogg", label=span("hogg"), icon("file-text")),
@@ -242,6 +244,7 @@ shinyUI(fluidPage(
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
+                         uiOutput("hyper_fit_small_summary"),
                          plotOutput("hyper_fit_plotPosterior", height="auto"),
                          uiOutput("hyper_fit_summary")
                      )

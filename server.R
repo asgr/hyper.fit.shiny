@@ -2,7 +2,7 @@ shinyServer(function(input, output, session) {
     
     # Data Selection Listeners #
     ############################
-    rvs <- reactiveValues(currentData = "none")
+    rvs <- reactiveValues(currentData = "example")
     observe({
         if (input$use_file1 != 0) {
             if(!is.null(isolate(input$upload_file1))) {
@@ -29,6 +29,10 @@ shinyServer(function(input, output, session) {
     observe({
         if (input$example_FP6dFGS != 0)
             rvs$currentData <- 'FP6dFGS'
+    })
+    observe({
+        if (input$use_example != 0)
+            rvs$currentData <- 'example'
     })
     
     # Selected Data UI #
@@ -93,6 +97,21 @@ shinyServer(function(input, output, session) {
         doerrorscale <- isolate(input$hyper_fit_doerrorscale)
         
         # check if example buttons were pressed
+        if(rvs$currentData[1] == 'example') {
+            xval <- c(-2,1,5,8,9)
+            yval <- c(0,2,5,6,8)
+            sx <- c(0.1,0.2,0.1,0.4,0.3)
+            sy <- c(0.2,0.3,0.1,0.2,0.5)
+            return(hyper.fit(X=cbind(xval,yval),
+                             vars=cbind(sx, sy)^2,
+                             itermax=itermax,
+                             coord.type=coord.type,
+                             scat.type=scat.type,
+                             algo.func=algo.func,
+                             algo.method=algo.method,
+                             Specs=Specs,
+                             doerrorscale=doerrorscale))
+        }
         if(rvs$currentData[1] == 'hogg') {
             return (hyper.fit(X=hogg[-3,c("x", "y")],
                               covarray=makecovarray2d(hogg[-3,"x_err"], hogg[-3,"y_err"], hogg[-3,"corxy"]),
@@ -150,7 +169,7 @@ shinyServer(function(input, output, session) {
                               Specs=Specs,
                               doerrorscale=doerrorscale))
         }
-        else if(rvs$currentData[1] != "none") {
+        else {
             
             # read in data from file
             df <- fread(rvs$currentData[2], header=TRUE, sep="auto", data.table=FALSE)
@@ -299,14 +318,66 @@ shinyServer(function(input, output, session) {
         HTML("<span style='color:#888888;'>Using ", getMethod()$name, "</span>")
     })
     
+    # Minimal Summary output #
+    ##########################
+    output$hyper_fit_small_summary <- renderUI({
+        out <- fit_result()
+        if(!is.null(out)) {
+            HTML("<p><b>alpha = ", out$parm[1], "</b></p>",
+                 "<p><b>error = ", out$parm.covar[1], "</b></p>
+                 <br/>")
+        }
+    })
+    
     # Summary output #
     ##################
     output$hyper_fit_summary <- renderUI({
         out <- fit_result()
         if(!is.null(out)) {
-            s <- capture.output(summary(out))
-            HTML("<h4>Summary</h4>", paste(as.list(s), collapse="<br/>"))
+            if(isolate(rvs$currentData[1]) == "example") {
+                HTML('<h4>The File:</h4>
+<pre>
+"x" "y" "sx" "sy"
+-2 0 0.1 0.2
+1 2 0.2 0.3
+5 5 0.1 0.1
+8 6 0.4 0.2
+9 8 0.3 0.5
+</pre>')
+            }
+            else {
+                s <- capture.output(summary(out))
+                HTML("<h4>Summary</h4>", paste(as.list(s), collapse="<br/>"))
+            }
         }
+    })
+    
+    # Drop-down headers #
+    #####################
+    
+    output$ui_fit_options_header <- renderUI({
+        if(input$ui_show_fit_options)
+            HTML("<h4>Fit Options <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></h4>")
+        else
+            HTML("<h4>Fit Options <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></h4>")
+    })
+    output$ui_plot_options_header <- renderUI({
+        if(input$ui_show_plot_options)
+            HTML("<h4>Plot Options <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></h4>")
+        else
+            HTML("<h4>Plot Options <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></h4>")
+    })
+    output$ui_upload_data_header <- renderUI({
+        if(input$ui_show_upload_data)
+            HTML("<h4>Upload Data <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></h4>")
+        else
+            HTML("<h4>Upload Data <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></h4>")
+    })
+    output$ui_example_data_header <- renderUI({
+        if(input$ui_show_example_data)
+            HTML("<h4>Example Data <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></h4>")
+        else
+            HTML("<h4>Example Data <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></h4>")
     })
     
     # CSS output (used to show/hide plots) #
