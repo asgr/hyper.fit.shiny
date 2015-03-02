@@ -6,6 +6,7 @@ library("shinyRGL")
 library("mcmcplots")
 library("LaplacesDemon")
 library("hyper.fit")
+library("data.table")
 
 data(hogg)
 data(FP6dFGS)

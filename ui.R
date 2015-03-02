@@ -123,7 +123,7 @@ shinyUI(fluidPage(
                                                   ),
                                                   column(6,
                                                          conditionalPanel(condition="input.hyper_fit_algo_func == 'LA' || input.hyper_fit_algo_func == 'LD'",
-                                                                          numericInput(inputId="hyper_fit_itermax", label="Max Iterations", value=1e4, min=0)
+                                                                          numericInput(inputId="hyper_fit_itermax", label="itermax", value=1e4, min=0)
                                                          )
                                                   )
                                               ),
@@ -162,7 +162,7 @@ shinyUI(fluidPage(
                                               uiOutput("hyper_fit_selected_method"),
                                               br(),
                                               conditionalPanel(condition="input.hyper_fit_algo_func == 'LD'",
-                                                               checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=FALSE),
+                                                               checkboxInput(inputId="hyper_fit_specs_checkbox", label=textOutput("hyper_fit_specs_label"), value=T),
                                                                conditionalPanel(condition="input.hyper_fit_specs_checkbox == true",
                                                                                 uiOutput("hyper_fit_specs_inputs")
                                                                )
@@ -211,10 +211,6 @@ shinyUI(fluidPage(
                              checkboxInput(inputId="ui_show_upload_data", label=h4("Upload Data"), value=TRUE),
                              conditionalPanel(condition="input.ui_show_upload_data == true",
                                               br(),
-                                              selectInput(inputId="file1_separator", label="File type", choices=list("csv"=",",
-                                                                                                                     "tsv"="\t",
-                                                                                                                     "ssv"=" "),
-                                                          selected=" "),
                                               fileInput('upload_file1', 'Choose file to upload',
                                                         accept = c(
                                                             'text/csv',
@@ -274,7 +270,7 @@ shinyUI(fluidPage(
                  h3("About"),
                  p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c")),
                  p(
-                     "hyper.fit is a package used to ....."
+                     "hyper.fit is a top level line fitting function that uses downhill searches (optim/LaplaceApproximation) or MCMC (LaplacesDemon) to search out the best fitting parameters for a hyperplane (minimum a 1D line for 2D data), including the intrinsic scatter as part of the fit."
                      ),
                  p(
                      "This website was written in the programming language", strong("R"), "by", strong("Joseph Dunne"), "and", strong("Aarom Robotham."),
@@ -285,10 +281,10 @@ shinyUI(fluidPage(
                  p(
                      "To use this website, data must first be specified.",
                      "Either example data (see", span("Example Data", style="text-decoration:underline;"), ")",
-                     "or custom data (see", span("Uploading Data", style="text-decoration:underline;"), ") can be used.",
+                     "or custom data (see", span("Upload Data", style="text-decoration:underline;"), ") can be used.",
                      "Once the data has been specified, the fitting line/plane can be calculated and plotted.",
-                     "To change the calculation method, see", span("Changing the Fit method.", style="text-decoration:underline;"),
-                     "To change the appearance of the plot, see", span("Changing the Plot style.", style="text-decoration:underline;")
+                     "To change the calculation method, see", span("Fit Options.", style="text-decoration:underline;"),
+                     "To change the appearance of the plot, see", span("Plot Options.", style="text-decoration:underline;")
                  ),
                  br(),
                  p(strong("Example Data", style="text-decoration:underline;")),
@@ -297,11 +293,10 @@ shinyUI(fluidPage(
                      "Once an example is clicked, the example data will be used in all future calculations."
                  ),
                  br(),
-                 p(strong("Uploading Data", style="text-decoration:underline;")),
+                 p(strong("Upload Data", style="text-decoration:underline;")),
                  p(
                      "Data may be uploaded under the", strong("Upload Data"), "section.",
-                     "Before uploading a file, the file type should be specified using the",span("File Type", style="text-decoration:underline;"), "menu.",
-                     "The menu entries include: CSV = comma-separated value, TSV = tab-separated values, SSV = space-separated values.",
+                     "The file format accepted has a header with quoted column names, and with the values separated by a separator in the set [ , tab space | ; : ].",
                      "Once the data is uploaded, it can be used in all future calculations by pressing the", actionButton(inputId="dud", label=span("Use"), icon("file-text"))   ,"button.",
                      "The uploaded data may either be 2D or 3D data, and below are some rules and examples of the 2D and 3D data:"
                  ),
@@ -361,7 +356,7 @@ shinyUI(fluidPage(
                                 </tbody></table>")
                             ),
                      column(4,
-                            p("Example of 2D data (SSV)", style="text-decoration:underline;"),
+                            p("Example of 2D data (space-separated)", style="text-decoration:underline;"),
                             HTML('<pre>
 "x" "y" "sx" "sy" "corxy" "weights"
 0.2695 0.0724 0.065 0.03 0.85 1.0
@@ -377,35 +372,125 @@ shinyUI(fluidPage(
                      column(5,
                             p("Example of 3D data (CSV)", style="text-decoration:underline;"),
                             HTML('<pre>
-"x","y","z","sx","sy","sz","corxy","corxz","coryz",
-0.2695,0.0724,0.0394,0.065,0.03,0.02,0.85,0,0,
-0.1615,0.0147,0.0529,0.065,0.03,0.02,0.85,0,0,
--0.0865,-0.151,0.0224,0.065,0.03,0.02,0.85,0,0,
-0.8808,0.5284,0.1042,0.065,0.03,0.02,0.85,0,0,
--0.8177,-0.9546,0,0.065,0.03,0.02,0.85,0,0,
-0.4069,0.0901,0.0191,0.065,0.03,0.02,0.85,0,0,
-0.4118,0.242,0.0292,0.065,0.03,0.02,0.85,0,0,
-0.4425,-0.0621,0.1424,0.065,0.03,0.02,0.85,0,0,
+"x","y","z","sx","sy","sz","corxy","corxz","coryz"
+0.2695,0.0724,0.0394,0.065,0.03,0.02,0.85,0,0
+0.1615,0.0147,0.0529,0.065,0.03,0.02,0.85,0,0
+-0.0865,-0.151,0.0224,0.065,0.03,0.02,0.85,0,0
+0.8808,0.5284,0.1042,0.065,0.03,0.02,0.85,0,0
+-0.8177,-0.9546,0,0.065,0.03,0.02,0.85,0,0
+0.4069,0.0901,0.0191,0.065,0.03,0.02,0.85,0,0
+0.4118,0.242,0.0292,0.065,0.03,0.02,0.85,0,0
+0.4425,-0.0621,0.1424,0.065,0.03,0.02,0.85,0,0
 </pre>')
                      )
                      ),
                  br(),
-                 p(strong("Changing the Fit method", style="text-decoration:underline;")),
+                 p(strong("Fit Options", style="text-decoration:underline;")),
                  p(
-                     "The method used to calculate the fit can be changed under", strong("Fit Options."),
-                     "Under", span("Algorithm,", style="text-decoration:underline;"), "the algorithm (optim, LA, or LD) may be chosen.",
-                     "When LA or LD is chosen, the max iterations can be set.",
-                     "When LD is chosen, the Specs can be set by clicking the", span("Specs", style="text-decoration:underline;"), "label.",
-                     "The Specs may be left as NULL, however not all methods accept a NULL value for the Specs."
+                     "Under",strong("Fit Options,"), "the following parameters can be specified for the fit calculation:"
                      ),
+                 fluidRow(
+                     column(2,
+                            strong("coord.type")
+                            ),
+                     column(10,
+                            p('This specifies whether the fit should be done in terms of the normal vector to the hyperplane (coord.type="normvec") gradients defined to produce values along the vert.axis dimension (coord.type="alpha") or by the values of the angles that form the gradients (coord.type="theta"). "theta" is the default since it will tend to produce a more numerically stable fit since changes in one angle will not impact the others as much as a change in the unit vector components.')
+                            )
+                     ),
+                 fluidRow(
+                     column(2,
+                            strong("scat.type")
+                     ),
+                     column(10,
+                            p('This specifies whether the intrinsic scatter should be defined orthogonal to the plane (orth) or along the vert.axis of interest (vert.axis).')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("doerrorscale")
+                     ),
+                     column(10,
+                            p('If FALSE then the provided covariance are treated as it. If TRUE then the likelihood function is also allowed to rescale all errors by a uniform multiplicative value.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("itermax")
+                     ),
+                     column(10,
+                            p('The maximum iterations to use for either the LaplaceApproximation function or LaplacesDemon function. (LA and LD only)')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Algorithm")
+                     ),
+                     column(10,
+                            p('If algo.func="optim" (default) hyper.fit will optimise using the R base optim function. If algo.func="LA" will optimise using the LaplaceApproximation function. If algo.func="LD" will optimise using the LaplacesDemon function. For both algo.func="LA" and algo.func="LD" the LaplacesDemon package will be used (see http://www.bayesian-inference.com/software).')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Method")
+                     ),
+                     column(10,
+                            p('Specifies the "method" argument of optim function when using algo.func="optim" (if not specified hyper.fit will use "Nelder-Mead" for optim). Specifies "Method" argument of LaplaceApproximation function when using algo.func="LA" (if not specified hyper.fit will use "NM" for LaplaceApproximation). Specifies "Algorithm" argument of LaplacesDemon function when using algo.func="LD" (if not specified hyper.fit will use "CHARM" for LaplacesDemon). When using algo.func="LD" the user can also specify further options via the Specs argument below.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Specs")
+                     ),
+                     column(10,
+                            p('Inputs to pass to the LaplacesDemon function. Default Specs=list(alpha.star = 0.44) option is for the default CHARM algorithm (see algo.method above). Specs can be set to NULL, but not all methods will accept this. (LD only)')
+                     )
+                 ),
                  br(),
-                 p(strong("Changing the Plot style", style="text-decoration:underline;")),
+                 p(strong("Plot Options", style="text-decoration:underline;")),
                  p(
-                     "The appearance of the plot can be changed under", strong("Plot Options."),
-                     span("SigScale", style="text-decoration:underline;"), "will change the colour scale of the points, and",
-                     span("Transparency", style="text-decoration:underline;"), "will change the transparency of the points.",
-                     span("Ellipses", style="text-decoration:underline;"), "will determine whether to use ellipses or points in the plot (ellipses may reduce performance).",
-                     "The", strong("2D only"), "section is for 2D plots only where options exist to include a SigScale bar."
+                     "Under",strong("Plot Options,"), "the following parameters can be specified to change the appearance of the plot:"
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("SigScale")
+                     ),
+                     column(10,
+                            p('Changes the colour range of the points.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Transparency")
+                     ),
+                     column(10,
+                            p('Sets the alpha of the points.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Ellipses")
+                     ),
+                     column(10,
+                            p('If set to TRUE, points will be displayed as ellipses. If FALSE, points are displayed as dots. Using ellipses may reduce the performance of the program.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Use Bar")
+                     ),
+                     column(10,
+                            p('If set to TRUE, a bar depicting the SigScale will appear on the plot. (2D only)')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Bar Position")
+                     ),
+                     column(10,
+                            p('Sets the position of the SigScale bar on the plot.',
+                            span("Use Bar", style="text-decoration:underline"),
+                            'must be set to TRUE to enable this option. (2D only)')
+                     )
                  )
         )
     ),

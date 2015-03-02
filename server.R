@@ -50,38 +50,40 @@ shinyServer(function(input, output, session) {
         
         # get specs
         Specs <- list()
-        spec_list <- isolate(getSpecs())
-        if(length(spec_list) > 0 && isolate(input$hyper_fit_specs_checkbox)==T) {
-            for(i in 1:length(spec_list)) {
-                
-                # get spec properties
-                spec_name <- spec_list[[i]]$spec
-                spec_id <- paste0("hyper_fit_spec_",spec_name)
-                spec_text <- isolate(input[[spec_id]])
-                
-                # if spec field is empty, use default value
-                if(nchar(spec_text)==0) {
-                    spec_text <- spec_list[[i]]$default
-                    updateTextInput(session, spec_id, value=spec_list[[i]]$default)
+        if(algo.func == "LD") {
+            spec_list <- isolate(getSpecs())
+            if(length(spec_list) > 0 && isolate(input$hyper_fit_specs_checkbox)==T) {
+                for(i in 1:length(spec_list)) {
+                    
+                    # get spec properties
+                    spec_name <- spec_list[[i]]$spec
+                    spec_id <- paste0("hyper_fit_spec_",spec_name)
+                    spec_text <- isolate(input[[spec_id]])
+                    
+                    # if spec field is empty, use default value
+                    if(nchar(spec_text)==0) {
+                        spec_text <- spec_list[[i]]$default
+                        updateTextInput(session, spec_id, value=spec_list[[i]]$default)
+                    }
+                    
+                    # parse the input
+                    tryCatch({
+                        ev <- eval(parse(text=spec_text))
+                        if(is.null(ev)) {
+                            Specs[spec_name] <- list(NULL)
+                        }
+                        else {
+                            Specs[[spec_name]] <- ev
+                        }
+                    },
+                    error = function(e){
+                        stop(paste0(spec_name, " has an invalid argument"))
+                    })
                 }
-                
-                # parse the input
-                tryCatch({
-                    ev <- eval(parse(text=spec_text))
-                    if(is.null(ev)) {
-                        Specs[spec_name] <- list(NULL)
-                    }
-                    else {
-                        Specs[[spec_name]] <- ev
-                    }
-                },
-                error = function(e){
-                    stop(paste0(spec_name, " has an invalid argument"))
-                })
             }
-        }
-        else {
-            Specs <- NULL
+            else {
+                Specs <- NULL
+            }
         }
         
         # get more options
@@ -150,11 +152,8 @@ shinyServer(function(input, output, session) {
         }
         else if(rvs$currentData[1] != "none") {
             
-            # get inputs
-            sep <- isolate(input$file1_separator)
-            
             # read in data from file
-            df <- read.table(rvs$currentData[2], header=TRUE, sep=sep, dec=".")
+            df <- fread(rvs$currentData[2], header=TRUE, sep="auto", data.table=FALSE)
             if(!is.null(df$x) && !is.null(df$y) && !is.null(df$z)) {ndims <- 3}
             else if(!is.null(df$x) && !is.null(df$y)) {ndims <- 2}
             else {stop("Input file needs x and y dimensions.")}
@@ -270,7 +269,12 @@ shinyServer(function(input, output, session) {
     #####################
     output$hyper_fit_specs_label <- renderText ({
         if(input$hyper_fit_specs_checkbox==TRUE) {
-            "Specs ="
+            if(length(getSpecs()) > 0) {
+                "Specs ="
+            }
+            else {
+                "Specs = list( )"
+            }
         }
         else {
             "Specs = NULL"
