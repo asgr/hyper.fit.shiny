@@ -289,7 +289,7 @@ shinyUI(fluidPage(
                  br(),
                  p(strong("Example Data", style="text-decoration:underline;")),
                  p(
-                     "Example data can be used by selecting an example under", strong("Example Data."),
+                     "Example data can be used by clicking an example under", strong("Example Data."),
                      "Once an example is clicked, the example data will be used in all future calculations."
                  ),
                  br(),
