@@ -1,9 +1,13 @@
-shinyUI(fluidPage(
+shinyUI(fluidPage(id="main-page",
     
     tags$head(
         tags$title("hyper.fit"),
         tags$link(rel="shortcut icon", href="favicon.ico"),
         tags$style(HTML("
+                        #main-page {
+                            padding-left:0px;
+                            padding-right:0px;
+                        }
                         .dataTables_info {display:none;}
                         .dataTables_wrapper .row-fluid {display:none;}
                         .ui_region {
@@ -63,6 +67,9 @@ shinyUI(fluidPage(
                         #ui_recalculate_div {
                             margin:5px;
                         }
+                        .container {
+                            text-align:justify;
+                        }
                         "))
     ),
     
@@ -76,6 +83,7 @@ shinyUI(fluidPage(
     # Main Content #
     ################
     
+    div(class="container-fluid",
     tabsetPanel(
         
         # Plot Tab #
@@ -271,38 +279,42 @@ shinyUI(fluidPage(
         ############
         tabPanel("Info", class="container-fluid",
                  h3("About"),
-                 p(span("Welcome to ICRAR's", strong("hyper.fit"), "website!", style="color:#08c")),
-                 p(
-                     "hyper.fit is a top level line fitting function that uses downhill searches (optim/LaplaceApproximation) or MCMC (LaplacesDemon) to search out the best fitting parameters for a hyperplane (minimum a 1D line for 2D data), including the intrinsic scatter as part of the fit."
-                     ),
-                 p(
-                     "This website was written in the programming language", strong("R"), "by", strong("Joseph Dunne"), "and", strong("Aarom Robotham."),
-                     "It uses the library", strong("Shiny"), "to provide the interface."
-                   ),
+                 div(class="container",
+                     p(
+                         "hyper.fit is a top level line fitting function that uses downhill searches (optim/LaplaceApproximation) or MCMC (LaplacesDemon) to search out the best fitting parameters for a hyperplane (minimum a 1D line for 2D data), including the intrinsic scatter as part of the fit."
+                     )
+                 ),
                  br(),
                  h3("Usage"),
-                 p(
-                     "To use this website, data must first be specified.",
-                     "Either example data (see", span("Example Data", style="text-decoration:underline;"), ")",
-                     "or custom data (see", span("Upload Data", style="text-decoration:underline;"), ") can be used.",
-                     "Once the data has been specified, the fitting line/plane can be calculated and plotted.",
-                     "To change the calculation method, see", span("Fit Options.", style="text-decoration:underline;"),
-                     "To change the appearance of the plot, see", span("Plot Options.", style="text-decoration:underline;")
+                 div(class="container",
+                     p(
+                         "Specify data first by using", span("Example Data", style="text-decoration:underline;"),
+                         "or", span("Uploaded Data.", style="text-decoration:underline;"),
+                         "Change the fitting parameters under", span("Fit Options", style="text-decoration:underline;"),
+                         "and click", span("Recalculate", style="text-decoration:underline;"),
+                         "to produce a different fit.",
+                         "The appearance of the plot can be changed under", span("Plot Options.", style="text-decoration:underline;")
+                     )
                  ),
                  br(),
                  p(strong("Example Data", style="text-decoration:underline;")),
-                 p(
-                     "Example data can be used by clicking an example under", strong("Example Data."),
-                     "Once an example is clicked, the example data will be used in all future calculations."
+                 div(class="container",
+                     p(
+                         "Example data can be used by clicking an example under", strong("Example Data."),
+                         "Once an example is clicked, the example data will be used in all future calculations."
+                     )
                  ),
                  br(),
                  p(strong("Upload Data", style="text-decoration:underline;")),
-                 p(
-                     "Data may be uploaded under the", strong("Upload Data"), "section.",
-                     "The file format accepted has a header with quoted column names, and with the values separated by a separator in the set [ , tab space | ; : ].",
-                     "Once the data is uploaded, it can be used in all future calculations by pressing the", actionButton(inputId="dud", label=span("Use"), icon("file-text"))   ,"button.",
-                     "The uploaded data may either be 2D or 3D data, and below are some rules and examples of the 2D and 3D data:"
+                 div(class="container",
+                     p(
+                         "Data may be uploaded under the", strong("Upload Data"), "section.",
+                         "The file format accepted has a header with quoted column names, and with the values separated by a separator in the set [ , tab space | ; : ].",
+                         "Once the data is uploaded, it can be used in all future calculations by pressing the", span("Use", style="text-decoration:underline;"), "button.",
+                         "The uploaded data may either be 2D or 3D data, and below are some rules and examples of the 2D and 3D data:"
+                     )
                  ),
+                 br(),
                  fluidRow(
                      column(3,
                             p(
@@ -389,12 +401,15 @@ shinyUI(fluidPage(
                      ),
                  br(),
                  p(strong("Fit Options", style="text-decoration:underline;")),
-                 p(
-                     "Under",strong("Fit Options,"), "the following parameters can be specified for the fit calculation:"
-                     ),
+                 div(class="container",
+                     p(
+                         "Under",strong("Fit Options,"), "the following parameters can be specified for the fit calculation. The names in",
+                         span("(grey)", style="color:#999999"), "represent the parameter names for the hyper.fit function."
+                     )
+                 ),
                  fluidRow(
                      column(2,
-                            strong("coord.type")
+                            strong("Coordinate Type"), p("(coord.type)", style="color:#999999")
                             ),
                      column(10,
                             p('This specifies whether the fit should be done in terms of the normal vector to the hyperplane (coord.type="normvec") gradients defined to produce values along the vert.axis dimension (coord.type="alpha") or by the values of the angles that form the gradients (coord.type="theta"). "theta" is the default since it will tend to produce a more numerically stable fit since changes in one angle will not impact the others as much as a change in the unit vector components.')
@@ -402,7 +417,7 @@ shinyUI(fluidPage(
                      ),
                  fluidRow(
                      column(2,
-                            strong("scat.type")
+                            strong("Scatter Type"), p("(scat.type)", style="color:#999999")
                      ),
                      column(10,
                             p('This specifies whether the intrinsic scatter should be defined orthogonal to the plane (orth) or along the vert.axis of interest (vert.axis).')
@@ -410,7 +425,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("doerrorscale")
+                            strong("Error Scale"), p("(doerrorscale)", style="color:#999999")
                      ),
                      column(10,
                             p('If FALSE then the provided covariance are treated as it. If TRUE then the likelihood function is also allowed to rescale all errors by a uniform multiplicative value.')
@@ -418,7 +433,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("itermax")
+                            strong("Max Iterations"), p("(itermax)", style="color:#999999")
                      ),
                      column(10,
                             p('The maximum iterations to use for either the LaplaceApproximation function or LaplacesDemon function. (LA and LD only)')
@@ -426,7 +441,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Algorithm")
+                            strong("Algorithm"), p("(algo.func)", style="color:#999999")
                      ),
                      column(10,
                             p('If algo.func="optim" (default) hyper.fit will optimise using the R base optim function. If algo.func="LA" will optimise using the LaplaceApproximation function. If algo.func="LD" will optimise using the LaplacesDemon function. For both algo.func="LA" and algo.func="LD" the LaplacesDemon package will be used (see http://www.bayesian-inference.com/software).')
@@ -434,7 +449,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Method")
+                            strong("Method"), p("(algo.method)", style="color:#999999")
                      ),
                      column(10,
                             p('Specifies the "method" argument of optim function when using algo.func="optim" (if not specified hyper.fit will use "Nelder-Mead" for optim). Specifies "Method" argument of LaplaceApproximation function when using algo.func="LA" (if not specified hyper.fit will use "NM" for LaplaceApproximation). Specifies "Algorithm" argument of LaplacesDemon function when using algo.func="LD" (if not specified hyper.fit will use "CHARM" for LaplacesDemon). When using algo.func="LD" the user can also specify further options via the Specs argument below.')
@@ -442,7 +457,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Specs")
+                            strong("Specs"), p("(Specs)", style="color:#999999")
                      ),
                      column(10,
                             p('Inputs to pass to the LaplacesDemon function. Default Specs=list(alpha.star = 0.44) option is for the default CHARM algorithm (see algo.method above). Specs can be set to NULL, but not all methods will accept this. (LD only)')
@@ -450,12 +465,15 @@ shinyUI(fluidPage(
                  ),
                  br(),
                  p(strong("Plot Options", style="text-decoration:underline;")),
-                 p(
-                     "Under",strong("Plot Options,"), "the following parameters can be specified to change the appearance of the plot:"
+                 div(class="container",
+                     p(
+                         "Under",strong("Plot Options,"), "the following parameters can change the appearance of the plot. The names in",
+                         span("(grey)", style="color:#999999"), "represent the parameter names for the plot.hyper.fit function."
+                     )
                  ),
                  fluidRow(
                      column(2,
-                            strong("SigScale")
+                            strong("Sigma Scale"), p("(sigscale)", style="color:#999999")
                      ),
                      column(10,
                             p('Changes the colour range of the points.')
@@ -463,7 +481,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Transparency")
+                            strong("Transparency"), p("(trans)", style="color:#999999")
                      ),
                      column(10,
                             p('Sets the alpha of the points.')
@@ -471,7 +489,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Ellipses")
+                            strong("Ellipses"), p("(doellipse)", style="color:#999999")
                      ),
                      column(10,
                             p('If set to TRUE, points will be displayed as ellipses. If FALSE, points are displayed as dots. Using ellipses may reduce the performance of the program.')
@@ -479,7 +497,7 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Use Bar")
+                            strong("Use Bar"), p("(dobar)", style="color:#999999")
                      ),
                      column(10,
                             p('If set to TRUE, a bar depicting the SigScale will appear on the plot. (2D only)')
@@ -487,16 +505,24 @@ shinyUI(fluidPage(
                  ),
                  fluidRow(
                      column(2,
-                            strong("Bar Position")
+                            strong("Bar Position"), p("(position)", style="color:#999999")
                      ),
                      column(10,
                             p('Sets the position of the SigScale bar on the plot.',
                             span("Use Bar", style="text-decoration:underline"),
                             'must be set to TRUE to enable this option. (2D only)')
                      )
+                 ),
+                 br(),
+                 h4("Acknowledgements"),
+                 div(class="container",
+                     p(
+                         "This website was written in the programming language", strong("R"), "by", strong("Joseph Dunne"), "and", strong("Aarom Robotham."),
+                         "It uses the library", strong("Shiny"), "to provide the interface."
+                     )
                  )
         )
-    ),
+    )),
     br(),
     div(
         span(a("ICRAR", href="http://www.icrar.org/", target="_blank"), "2015, written by Joseph Dunne, Aaron Robotham", style="color:grey;font-size:12px;"),
