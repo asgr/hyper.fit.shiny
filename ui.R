@@ -47,6 +47,12 @@ shinyUI(fluidPage(id="main-page",
                         #ui_show_example_data {
                             display:none;
                         }
+                        .ui_region label[for=ui_show_column_names] {
+                            padding-left:0px;
+                        }
+                        #ui_show_column_names {
+                            display:none;
+                        }
                         #ui_sidebar {
                             padding:10px;
                             background-color:#FAFAFA;
@@ -229,7 +235,27 @@ shinyUI(fluidPage(id="main-page",
                                                             '.tsv'
                                                         )
                                               ),
-                                              strong("PUT VARIABLE NAMES HERE"),
+                                              checkboxInput(inputId="ui_show_column_names", label=uiOutput("ui_column_names_header"), value=FALSE),
+                                              conditionalPanel(condition="input.ui_show_column_names == true",
+                                                               fluidRow(
+                                                                   column(4,
+                                                                          textInput(inputId="hyper_fit_column_x", label="x :", value="x"),
+                                                                          textInput(inputId="hyper_fit_column_y", label="y :", value="y"),
+                                                                          textInput(inputId="hyper_fit_column_z", label="z :", value="z")
+                                                                   ),
+                                                                   column(4,
+                                                                          textInput(inputId="hyper_fit_column_sx", label="sx :", value="sx"),
+                                                                          textInput(inputId="hyper_fit_column_sy", label="sy :", value="sy"),
+                                                                          textInput(inputId="hyper_fit_column_sz", label="sz :", value="sz")
+                                                                   ),
+                                                                   column(4,
+                                                                          textInput(inputId="hyper_fit_column_corxy", label="corxy :", value="corxy"),
+                                                                          textInput(inputId="hyper_fit_column_corxz", label="corxz :", value="corxz"),
+                                                                          textInput(inputId="hyper_fit_column_coryz", label="coryz :", value="coryz")
+                                                                   )
+                                                               ),
+                                                               textInput(inputId="hyper_fit_column_weights", label="weights :", value="weights")
+                                              ),
                                               actionButton(inputId="use_file1", label=span("Use"), icon("file-text")),
                                               actionButton(inputId="use_example", label=span("Show Example")) 
                              )

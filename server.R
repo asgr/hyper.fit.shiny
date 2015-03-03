@@ -171,34 +171,46 @@ shinyServer(function(input, output, session) {
         }
         else {
             
+            # get column names
+            col_x <- isolate(input$hyper_fit_column_x)
+            col_y <- isolate(input$hyper_fit_column_y)
+            col_z <- isolate(input$hyper_fit_column_z)
+            col_sx <- isolate(input$hyper_fit_column_sx)
+            col_sy <- isolate(input$hyper_fit_column_sy)
+            col_sz <- isolate(input$hyper_fit_column_sz)
+            col_corxy <- isolate(input$hyper_fit_column_corxy)
+            col_corxz <- isolate(input$hyper_fit_column_corxz)
+            col_coryz <- isolate(input$hyper_fit_column_coryz)
+            col_weights <- isolate(input$hyper_fit_column_weights)
+            
             # read in data from file
             df <- fread(rvs$currentData[2], header=TRUE, sep="auto", data.table=FALSE)
-            if(!is.null(df$x) && !is.null(df$y) && !is.null(df$z)) {ndims <- 3}
-            else if(!is.null(df$x) && !is.null(df$y)) {ndims <- 2}
+            if(!is.null(df[[col_x]]) && !is.null(df[[col_y]]) && !is.null(df[[col_z]])) {ndims <- 3}
+            else if(!is.null(df[[col_x]]) && !is.null(df[[col_y]])) {ndims <- 2}
             else {stop("Input file needs x and y dimensions.")}
             nrows <- nrow(df)
             
             # construct either 3d data or 2d data
             if(ndims == 3) {
-                covarray <- makecovarray3d (if(is.null(df$sx)) rep(0, nrows) else df$sx,
-                                            if(is.null(df$sy)) rep(0, nrows) else df$sy,
-                                            if(is.null(df$sz)) rep(0, nrows) else df$sz,
-                                            if(is.null(df$corxy)) rep(0, nrows) else df$corxy,
-                                            if(is.null(df$corxz)) rep(0, nrows) else df$corxz,
-                                            if(is.null(df$coryz)) rep(0, nrows) else df$coryz)
-                X <- matrix(c(df$x, df$y, df$z),nrows,ndims,byrow=FALSE)
-                colnames(X) <- c("x", "y", "z")
+                covarray <- makecovarray3d (if(is.null(df[[col_sx]])) rep(0, nrows) else df[[col_sx]],
+                                            if(is.null(df[[col_sy]])) rep(0, nrows) else df[[col_sy]],
+                                            if(is.null(df[[col_sz]])) rep(0, nrows) else df[[col_sz]],
+                                            if(is.null(df[[col_corxy]])) rep(0, nrows) else df[[col_corxy]],
+                                            if(is.null(df[[col_corxz]])) rep(0, nrows) else df[[col_corxz]],
+                                            if(is.null(df[[col_coryz]])) rep(0, nrows) else df[[col_coryz]])
+                X <- matrix(c(df[[col_x]], df[[col_y]], df[[col_z]]),nrows,ndims,byrow=FALSE)
+                colnames(X) <- c(col_x, col_y, col_z)
             }
             else if(ndims == 2) {
-                covarray <- makecovarray2d (if(is.null(df$sx)) rep(0, nrows) else df$sx,
-                                            if(is.null(df$sy)) rep(0, nrows) else df$sy,
-                                            if(is.null(df$corxy)) rep(0, nrows) else df$corxy)
-                X <- matrix(c(df$x, df$y),nrows,ndims,byrow=FALSE)
-                colnames(X) <- c("x", "y")
+                covarray <- makecovarray2d (if(is.null(df[[col_sx]])) rep(0, nrows) else df[[col_sx]],
+                                            if(is.null(df[[col_sy]])) rep(0, nrows) else df[[col_sy]],
+                                            if(is.null(df[[col_corxy]])) rep(0, nrows) else df[[col_corxy]])
+                X <- matrix(c(df[[col_x]], df[[col_y]]),nrows,ndims,byrow=FALSE)
+                colnames(X) <- c(col_x, col_y)
             }
             
             # check for weights
-            weights <- if(is.null(df$weights)) 1 else df$weights
+            weights <- if(is.null(df[[col_weights]])) 1 else df[[col_weights]]
             
             # return data
             return (hyper.fit(X=X, covarray=covarray, weights=weights,
@@ -378,6 +390,12 @@ shinyServer(function(input, output, session) {
             HTML("<h4>Example Data <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></h4>")
         else
             HTML("<h4>Example Data <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></h4>")
+    })
+    output$ui_column_names_header <- renderUI({
+        if(input$ui_show_column_names)
+            HTML("<b>Column Names <i class='fa fa-chevron-down' style='color:#AAAAAA;'></i></b>")
+        else
+            HTML("<b>Column Names <i class='fa fa-chevron-up' style='color:#AAAAAA;'></i></b>")
     })
     
     # CSS output (used to show/hide plots) #
