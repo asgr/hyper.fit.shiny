@@ -433,6 +433,7 @@ shinyUI(fluidPage(id="main-page",
                          span("(grey)", style="color:#999999"), "represent the parameter names for the hyper.fit function."
                      )
                  ),
+                 br(),
                  fluidRow(
                      column(2,
                             strong("Coordinate Type"), p("(coord.type)", style="color:#999999")
@@ -497,6 +498,7 @@ shinyUI(fluidPage(id="main-page",
                          span("(grey)", style="color:#999999"), "represent the parameter names for the plot.hyper.fit function."
                      )
                  ),
+                 br(),
                  fluidRow(
                      column(2,
                             strong("Sigma Scale"), p("(sigscale)", style="color:#999999")
