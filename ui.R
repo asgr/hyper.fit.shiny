@@ -198,7 +198,14 @@ shinyUI(fluidPage(id="main-page",
                                                          sliderInput(inputId="hyper_fit_trans", label="Transparency", min=0.01, max=1, value=1, step=0.01, ticks=FALSE)
                                                   )
                                               ),
-                                              checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE),
+                                              fluidRow(
+                                                  column(6,
+                                                         checkboxInput(inputId="hyper_fit_doellipse", label="Ellipses", value=TRUE)
+                                                  ),
+                                                  column(6,
+                                                         numericInput(inputId="hyper_fit_sigfigs", label="Sig Figs", value=6,max=15,min=1)
+                                                  )
+                                              ),
                                               tags$hr(),
                                               fluidRow(
                                                   column(6,
@@ -281,12 +288,7 @@ shinyUI(fluidPage(id="main-page",
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
-                         fluidRow(column(6,
-                                         uiOutput("hyper_fit_small_summary")
-                                         ),
-                                  column(6,
-                                         uiOutput("hyper_fit_small_summary_err")
-                                         )),
+                         uiOutput("hyper_fit_small_summary"),
                          plotOutput("hyper_fit_plotPosterior", height="auto"),
                          uiOutput("hyper_fit_summary")
                      )
@@ -529,6 +531,14 @@ shinyUI(fluidPage(id="main-page",
                      ),
                      column(10,
                             p('If set to TRUE, points will be displayed as ellipses. If FALSE, points are displayed as dots. Using ellipses may reduce the performance of the program.')
+                     )
+                 ),
+                 fluidRow(
+                     column(2,
+                            strong("Sig Figs")
+                     ),
+                     column(10,
+                            p('The number of significant figures to show in the main output.')
                      )
                  ),
                  fluidRow(

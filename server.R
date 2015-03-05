@@ -335,17 +335,9 @@ shinyServer(function(input, output, session) {
     output$hyper_fit_small_summary <- renderUI({
         out <- fit_result()
         if(!is.null(out) && isolate(rvs$currentData[1]) != "example") {
-            HTML(paste0("<p><b>",names(out$parm)," = ",out$parm,"</b></p>"),"<br/>")
-        }
-    })
-    
-    # Minimal Summary output err #
-    ##############################
-    output$hyper_fit_small_summary_err <- renderUI({
-        out <- fit_result()
-        if(!is.null(out) && isolate(rvs$currentData[1]) != "example") {
+            sigF <- input$hyper_fit_sigfigs
             
-            # From Aaron's summary.hyper.fit code
+            # Aaron's code from summary.hyper.fit
             if (class(out$fit) == "optim" | class(out$fit) == "laplace") {
                 if (out$parm.covar[1] != "singular" & out$parm.covar[1] != "unstable") {
                     errors = sqrt(diag(out$parm.covar))
@@ -362,9 +354,8 @@ shinyServer(function(input, output, session) {
                     errors = out$fit$Summary1[1:(out$dims + 1), "SD"]
                 }
             }
-            names(errors) = paste0("err_",names(out$parm))
             
-            HTML(paste0("<p><b>",names(errors)," = ",errors,"</b></p>"),"<br/>")
+            HTML(paste0("<p><b>",names(out$parm)," = ",signif(out$parm,digits=sigF),"</b> ± ", signif(errors,digits=sigF),"</p>"),"<br/>")
         }
     })
     
