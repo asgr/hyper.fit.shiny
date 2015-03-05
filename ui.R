@@ -76,6 +76,9 @@ shinyUI(fluidPage(id="main-page",
                         .container {
                             text-align:justify;
                         }
+                        .well {
+                            border:none;
+                        }
                         "))
     ),
     
@@ -115,19 +118,19 @@ shinyUI(fluidPage(id="main-page",
                              conditionalPanel(condition="input.ui_show_fit_options == true",
                                               br(),
                                               fluidRow(
-                                                  column(6,
+                                                  column(5,
                                                          selectInput(inputId="hyper_fit_coord_type",
                                                                      label="Coordinate Type",
-                                                                     choices=list("normal vector"="normvec",
-                                                                                  "alpha"="alpha",
-                                                                                  "theta"="theta"),
+                                                                     choices=list("Normal Vector"="normvec",
+                                                                                  "Alpha"="alpha",
+                                                                                  "Theta"="theta"),
                                                                      selected="alpha")
                                                   ),
-                                                  column(6,
+                                                  column(7,
                                                          selectInput(inputId="hyper_fit_scat_type",
                                                                      label="Scatter Type",
-                                                                     choices=list("orthogonal"="orth",
-                                                                                  "vert.axis"="vert.axis"),
+                                                                     choices=list("Orthogonal to Plane"="orth",
+                                                                                  "Along vertical axis"="vert.axis"),
                                                                      selected="vert.axis")
                                                   )
                                               ),
@@ -146,7 +149,7 @@ shinyUI(fluidPage(id="main-page",
                                                          selectInput(inputId="hyper_fit_algo_func",
                                                                      label="Algorithm",
                                                                      choices=list(
-                                                                         "optim"="optim",
+                                                                         "Optim"="optim",
                                                                          "LA"="LA",
                                                                          "LD"="LD"
                                                                      ),
@@ -278,7 +281,12 @@ shinyUI(fluidPage(id="main-page",
                      mainPanel(
                          webGLOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
-                         uiOutput("hyper_fit_small_summary"),
+                         fluidRow(column(6,
+                                         uiOutput("hyper_fit_small_summary")
+                                         ),
+                                  column(6,
+                                         uiOutput("hyper_fit_small_summary_err")
+                                         )),
                          plotOutput("hyper_fit_plotPosterior", height="auto"),
                          uiOutput("hyper_fit_summary")
                      )

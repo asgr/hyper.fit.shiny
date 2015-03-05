@@ -334,10 +334,37 @@ shinyServer(function(input, output, session) {
     ##########################
     output$hyper_fit_small_summary <- renderUI({
         out <- fit_result()
-        if(!is.null(out)) {
-            HTML("<p><b>alpha = ", out$parm[1], "</b></p>",
-                 "<p><b>error = ", out$parm.covar[1], "</b></p>
-                 <br/>")
+        if(!is.null(out) && isolate(rvs$currentData[1]) != "example") {
+            HTML(paste0("<p><b>",names(out$parm)," = ",out$parm,"</b></p>"),"<br/>")
+        }
+    })
+    
+    # Minimal Summary output err #
+    ##############################
+    output$hyper_fit_small_summary_err <- renderUI({
+        out <- fit_result()
+        if(!is.null(out) && isolate(rvs$currentData[1]) != "example") {
+            
+            # From Aaron's summary.hyper.fit code
+            if (class(out$fit) == "optim" | class(out$fit) == "laplace") {
+                if (out$parm.covar[1] != "singular" & out$parm.covar[1] != "unstable") {
+                    errors = sqrt(diag(out$parm.covar))
+                }
+                else {
+                    errors = rep(out$parm.covar[1], length(out$parm))
+                }
+            }
+            else if (class(out$fit) == "demonoid") {
+                if (out$args$doerrorscale) {
+                    errors = out$fit$Summary1[1:(out$dims + 2), "SD"]
+                }
+                else {
+                    errors = out$fit$Summary1[1:(out$dims + 1), "SD"]
+                }
+            }
+            names(errors) = paste0("err_",names(out$parm))
+            
+            HTML(paste0("<p><b>",names(errors)," = ",errors,"</b></p>"),"<br/>")
         }
     })
     
@@ -347,15 +374,20 @@ shinyServer(function(input, output, session) {
         out <- fit_result()
         if(!is.null(out)) {
             if(isolate(rvs$currentData[1]) == "example") {
-                HTML('<h4>The File:</h4>
-<pre>
+                fluidRow(column(5,
+                                h4("The File"),
+                                HTML('<pre>
 "x" "y" "sx" "sy"
 -2 0 0.1 0.2
 1 2 0.2 0.3
 5 5 0.1 0.1
 8 6 0.4 0.2
-9 8 0.3 0.5
-</pre>')
+9 8 0.3 0.5</pre>')
+                                ),
+                         column(7,
+                                h4("Make your Own Fit"),
+                                p("Choose data from",strong("Example Data"),"or upload your own data under",strong("Upload Data."))
+                                ))
             }
             else {
                 s <- capture.output(summary(out))
