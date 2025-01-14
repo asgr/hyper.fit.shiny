@@ -243,7 +243,7 @@ shinyServer(function(input, output, session) {
     
     # 3d plot function #
     ####################
-    output$hyper_fit_plot3d <- renderWebGL({
+    output$hyper_fit_plot3d <- renderRglwidget({
         out <- fit_result()
         if(!is.null(out) && out$dims == 3) {
             plot(out,
@@ -256,6 +256,7 @@ shinyServer(function(input, output, session) {
             points3d(1,1,1)
             axes3d()
         }
+        rglwidget()
     })
     
     # Posterior1 plot height #
@@ -445,7 +446,7 @@ shinyServer(function(input, output, session) {
     
     # Methods tab - optim table #
     #############################
-    output$methods_optim_algs = renderDataTable({
+    output$methods_optim_algs = DT::renderDT({
         
         # gather info from main table
         acros <- sapply(algsTable$optim, function(alg) { alg[["alg"]] })
@@ -461,7 +462,7 @@ shinyServer(function(input, output, session) {
     
     # Methods tab - LA table #
     ##########################
-    output$methods_LA_algs = renderDataTable({
+    output$methods_LA_algs = DT::renderDT({
         
         # gather info from main table
         acros <- sapply(algsTable$LA, function(alg) { alg[["alg"]] })
@@ -477,7 +478,7 @@ shinyServer(function(input, output, session) {
     
     # Methods tab - LD table #
     ##########################
-    output$methods_LD_algs = renderDataTable({
+    output$methods_LD_algs = DT::renderDT({
         
         # gather info from main table
         acros <- sapply(algsTable$LD, function(alg) { alg[["alg"]] })

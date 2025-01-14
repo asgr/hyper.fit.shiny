@@ -106,7 +106,7 @@ shinyUI(fluidPage(id="main-page",
                          id="ui_sidebar",
                          fluidRow(id="ui_recalculate_div",
                                   column(6,
-                                         actionButton(inputId="hyper_fit_calculate", label=span("Recalculate"), icon("bar-chart-o"))
+                                         actionButton(inputId="hyper_fit_calculate", label=span("Recalculate"), icon("bar-chart"))
                                   ),
                                   column(6,
                                          uiOutput("hyper_fit_data_used")
@@ -286,7 +286,7 @@ shinyUI(fluidPage(id="main-page",
                     # Main Panel (outputs) #
                     ########################
                      mainPanel(
-                         webGLOutput("hyper_fit_plot3d", width="100%"),
+                         rglwidgetOutput("hyper_fit_plot3d", width="100%"),
                          plotOutput("hyper_fit_plot2d"),
                          uiOutput("hyper_fit_small_summary"),
                          plotOutput("hyper_fit_plotPosterior", height="auto"),
@@ -302,13 +302,13 @@ shinyUI(fluidPage(id="main-page",
                  p("Below are the available methods for optim, LA and LD."),
                  br(),
                  h4("Optim :"),
-                 dataTableOutput("methods_optim_algs"),
+                 DT::DTOutput("methods_optim_algs"),
                  br(),
                  h4("LaplaceApproximation (LA) :"),
-                 dataTableOutput("methods_LA_algs"),
+                 DT::DTOutput("methods_LA_algs"),
                  br(),
                  h4("LaplacesDemon (LD) :"),
-                 dataTableOutput("methods_LD_algs")
+                 DT::DTOutput("methods_LD_algs")
         ),
         
         # Info Tab #
