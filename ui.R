@@ -1,6 +1,7 @@
 shinyUI(fluidPage(id="main-page",
     
     tags$head(
+        includeHTML("google-analytics.html"),
         tags$title("hyper.fit"),
         tags$link(rel="shortcut icon", href="favicon.ico"),
         tags$style(HTML("
